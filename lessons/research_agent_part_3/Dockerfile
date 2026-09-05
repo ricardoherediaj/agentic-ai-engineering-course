@@ -28,6 +28,7 @@ FROM python:3.12.11-slim AS runtime
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq5 \
     git \
+    procps \
     && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user for security
