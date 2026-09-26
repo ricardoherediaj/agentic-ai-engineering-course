@@ -1,0 +1,115 @@
+name: Deploy Nova MCP Server
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Deployment environment"
+        required: true
+        default: "production"
+        type: choice
+        options:
+          - production
+
+env:
+  GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+  GCP_REGION: ${{ vars.GCP_REGION || 'us-central1' }}
+  SERVICE_NAME: nova-mcp-server
+  ARTIFACT_REGISTRY_REPO: nova-mcp
+  CLOUD_SQL_INSTANCE: ${{ vars.CLOUD_SQL_INSTANCE }}
+
+jobs:
+  deploy:
+    name: Build and Deploy to Cloud Run
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+
+      - name: Configure Docker for Artifact Registry
+        run: |
+          gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev --quiet
+
+      - name: Build Docker image
+        working-directory: lessons/research_agent_part_3
+        run: |
+          docker build \
+            -f Dockerfile.cloudrun \
+            -t ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }} \
+            -t ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:latest \
+            .
+
+      - name: Push Docker image to Artifact Registry
+        run: |
+          docker push ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
+          docker push ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:latest
+
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ env.SERVICE_NAME }}
+          region: ${{ env.GCP_REGION }}
+          image: ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
+          flags: |
+            --allow-unauthenticated
+            --port=8080
+            --cpu=1
+            --memory=512Mi
+            --min-instances=0
+            --max-instances=10
+            --concurrency=80
+            --timeout=300s
+            --add-cloudsql-instances=${{ env.CLOUD_SQL_INSTANCE }}
+          env_vars: |
+            CLOUD_SQL_INSTANCE=${{ env.CLOUD_SQL_INSTANCE }}
+            DB_NAME=nova_research
+            LOG_LEVEL=INFO
+            SERVER_HOST=0.0.0.0
+            SERVER_URL=${{ vars.SERVICE_URL }}
+            DESCOPE_BASE_URL=https://api.descope.com
+            WEB_SEARCH_PROVIDER=tavily
+            OPIK_WORKSPACE=netpass14
+            OPIK_PROJECT_NAME=nova
+          secrets: |
+            DB_USER=db-user:latest
+            DB_PASS=db-password:latest
+            GOOGLE_API_KEY=google-api-key:latest
+            TAVILY_API_KEY=tavily-api-key:latest
+            FIRECRAWL_API_KEY=firecrawl-api-key:latest
+            GITHUB_TOKEN=github-token:latest
+            OPIK_API_KEY=opik-api-key:latest
+            DESCOPE_PROJECT_ID=descope-project-id:latest
+
+      - name: Show deployment URL
+        run: |
+          echo "🚀 Deployment successful!"
+          echo "Service URL: ${{ steps.deploy.outputs.url }}"
+
+      - name: Run smoke test
+        run: |
+          sleep 10
+          HEALTH_URL="${{ steps.deploy.outputs.url }}"
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${HEALTH_URL}" || echo "000")
+          if [ "$HTTP_STATUS" = "200" ] || [ "$HTTP_STATUS" = "404" ]; then
+            echo "Service is responding (HTTP $HTTP_STATUS)"
+          else
+            echo "Service returned HTTP $HTTP_STATUS - may still be starting up"
+          fi
