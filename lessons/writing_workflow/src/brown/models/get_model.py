@@ -1,4 +1,5 @@
 import json
+import uuid
 
 from langchain.chat_models import init_chat_model
 from langchain_core.language_models import BaseChatModel
@@ -24,6 +25,8 @@ OPENCODE_GO_PREFIX = "opencode_go:"
 OPENCODE_GO_BASE_URL = "https://opencode.ai/zen/go/v1"
 # Go's terms ask clients to identify with their own user agent (never impersonate OpenCode).
 OPENCODE_GO_USER_AGENT = "underdoc-evals/0.1"
+# Go requires a stable `x-opencode-session` header for routing and prompt caching; one per process run.
+OPENCODE_GO_SESSION_ID = f"underdoc-evals-{uuid.uuid4()}"
 # Models served by the OpenAI Responses endpoint; the rest use chat completions.
 OPENCODE_GO_RESPONSES_MODELS = {SupportedModels.OPENCODE_GO_GPT_6_LUNA}
 # Gemini-only ModelConfig fields that ChatOpenAI would reject.
@@ -42,14 +45,15 @@ def _get_opencode_go_model(model: SupportedModels, config: ModelConfig) -> BaseC
     if "max_output_tokens" in kwargs:
         kwargs["max_tokens"] = kwargs.pop("max_output_tokens")
     if use_responses_api:
-        # Reasoning models on the Responses API may reject sampling parameters.
+        # Reasoning models on the Responses API may reject sampling parameters, and `Responses.parse()` has no `n`.
         kwargs.pop("temperature", None)
+        kwargs.pop("n", None)
 
     return ChatOpenAI(
         model=model.value.removeprefix(OPENCODE_GO_PREFIX),
         base_url=OPENCODE_GO_BASE_URL,
         api_key=api_key,
-        default_headers={"User-Agent": OPENCODE_GO_USER_AGENT},
+        default_headers={"User-Agent": OPENCODE_GO_USER_AGENT, "x-opencode-session": OPENCODE_GO_SESSION_ID},
         use_responses_api=use_responses_api,
         **kwargs,
     )

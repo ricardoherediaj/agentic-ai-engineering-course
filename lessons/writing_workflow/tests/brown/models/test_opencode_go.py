@@ -35,7 +35,11 @@ def test_opencode_model_builds_offline(model, model_id, responses) -> None:
     assert isinstance(llm, ChatOpenAI)
     assert llm.model_name == model_id
     assert llm.openai_api_base == "https://opencode.ai/zen/go/v1"
-    assert llm.default_headers == {"User-Agent": "underdoc-evals/0.1"}
+    assert llm.default_headers["User-Agent"] == "underdoc-evals/0.1"
+    # Go rejects requests without a stable per-run session header.
+    assert llm.default_headers["x-opencode-session"]
+    with patch("brown.models.get_model.get_settings", return_value=settings):
+        assert get_model(model).default_headers["x-opencode-session"] == llm.default_headers["x-opencode-session"]
     assert bool(llm.use_responses_api) is responses
     assert llm.openai_api_key.get_secret_value() == "injected-test-key"
 
