@@ -10,8 +10,9 @@ from brown.models import ModelConfig, SupportedModels
 
 from .follows_gt import FollowsGTMetricLLMJudge
 from .user_intent import UserIntentMetricLLMJudge
+from .voice_adherence import VoiceAdherenceMetricLLMJudge
 
-__all__ = ["UserIntentMetricLLMJudge", "FollowsGTMetricLLMJudge", "build_evaluation_metrics"]
+__all__ = ["UserIntentMetricLLMJudge", "FollowsGTMetricLLMJudge", "VoiceAdherenceMetricLLMJudge", "build_evaluation_metrics"]
 
 
 def build_evaluation_metrics(
@@ -23,6 +24,7 @@ def build_evaluation_metrics(
         metrics: List of metric names to use. Valid values are:
             - "user_intent": Evaluates if article follows guidelines and is anchored in research
             - "follows_gt": Evaluates article structure and content
+            - "voice_adherence": Evaluates adherence to the Underdoc authorial voice (no ground truth)
         model: The language model to use for evaluation.
         model_config: Configuration for the model including temperature, thinking budget,
             and retry settings. If None, each metric uses its default configuration.
@@ -37,6 +39,7 @@ def build_evaluation_metrics(
     metrics_mapping = {
         "user_intent": UserIntentMetricLLMJudge(model=model, model_config=model_config),
         "follows_gt": FollowsGTMetricLLMJudge(model=model, model_config=model_config),
+        "voice_adherence": VoiceAdherenceMetricLLMJudge(model=model, model_config=model_config),
     }
 
     try:

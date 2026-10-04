@@ -28,7 +28,8 @@ from brown.observability.evaluation import evaluate
     multiple=True,
     default=["follows_gt"],
     help="Metrics to use for evaluation. Available metrics: 'follows_gt' (evaluates agains ground truth),"
-    "'user_intent' (evaluates guideline adherence and research anchoring).",
+    "'user_intent' (evaluates guideline adherence and research anchoring),"
+    "'voice_adherence' (LLM judge of the Underdoc authorial voice, no ground truth needed).",
 )
 @click.option(
     "--split",
@@ -88,7 +89,7 @@ def main(
 
     Args:
         dataset_name: Name of the Opik dataset to evaluate.
-        metrics: Names of scoring metrics to use. Supported: "follows_gt", "user_intent".
+        metrics: Names of scoring metrics to use. Supported: "follows_gt", "user_intent", "voice_adherence".
         split: Dataset split to use. "val" includes only "Lesson 10: Memory", "test" includes all other lessons.
         cache_dir: Directory used to cache generated artifacts and results.
         workers: Number of parallel workers to use during evaluation.
@@ -96,7 +97,7 @@ def main(
         read_from_cache: If True, read generated outputs from cache instead of generating.
         debug: If True, enables additional debugging information in the workflow.
         judge_model: Value of the SupportedModels entry used as the LLM judge.
-        metrics: Names of scoring metrics to use. Supported: "follows_gt", "user_intent".
+        metrics: Names of scoring metrics to use. Supported: "follows_gt", "user_intent", "voice_adherence".
 
     Raises:
         click.ClickException: If the evaluation run fails.
