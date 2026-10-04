@@ -179,3 +179,16 @@ def test_cli_prints_per_metric_overall_and_flips(tmp_path, capsys):
     assert "Disagreements" in out
     assert "Flips vs baseline: 1" in out
     assert "Unmatched" in out
+
+
+def test_cli_slug_filter_limits_items_to_matching_posts(tmp_path, capsys):
+    mod = _load()
+    outputs = _write_outputs(tmp_path / "out")
+    sheet = tmp_path / "sheet.md"
+    sheet.write_text(SHEET)
+
+    code = mod.main(["--sheet", str(sheet), "--outputs", str(outputs), "--slug", "no-such-post"])
+
+    out = capsys.readouterr().out
+    assert code == 0
+    assert "0/0" in out

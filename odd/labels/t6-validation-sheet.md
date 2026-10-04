@@ -19,82 +19,82 @@ Anchor choice: the ground truth has no H2s (it uses H4 headings), so FollowsGT s
 #### "Introduction"
 
 - [x] follows_gt.content: both open on the shift in how code gets written and cite Karpathy's "Software Is Changing (Again)" talk with the same claim (more thinking, planning, reviewing than writing from scratch).
-- [ ] follows_gt.flow: generated opens with an invented anecdote ("it renamed a column that three of my plots depended on") and adds "I don't work that way on everything"; ground truth goes ChatGPT era, Karpathy quote, tools rising.
-- [ ] follows_gt.structure: ground truth sets Karpathy's words as a bold blockquote with a footnote; generated paraphrases inline with a plain link and no blockquote.
+- [x] follows_gt.flow: generated opens with an invented anecdote ("it renamed a column that three of my plots depended on") and adds "I don't work that way on everything"; ground truth goes ChatGPT era, Karpathy quote, tools rising.
+- [x] follows_gt.structure: ground truth sets Karpathy's words as a bold blockquote with a footnote; generated paraphrases inline with a plain link and no blockquote.
 
 #### "What are Agentic IDEs?"
 
 - [x] follows_gt.content: both define agentic IDEs and list the same capabilities (several LLM providers, indexing codebase and docs, MCP, autonomous edits, completions) and mention Claude Code and Gemini CLI.
-- [ ] follows_gt.flow: generated adds a "friend finishing your sentence" analogy and drops the planning-to-execution and workflow-adaptation points; ground truth ends on those.
-- [ ] follows_gt.structure: ground truth uses a bulleted capabilities list; generated packs them into one sentence, "You get several LLM providers inside one window, indexing over your codebase...".
+- [x] follows_gt.flow: generated adds a "friend finishing your sentence" analogy and drops the planning-to-execution and workflow-adaptation points; ground truth ends on those.
+- [x] follows_gt.structure: ground truth uses a bulleted capabilities list; generated packs them into one sentence, "You get several LLM providers inside one window, indexing over your codebase...".
 
 #### "What are their main challenges?"
 
-- [ ] follows_gt.content: ground truth challenges are about using the tools (which LLM for which task, rate limits, prompt formats, context window, agent leash, MCPs); generated lists code failures ("Invented columns", "Repeated code"), which the ground truth puts under Example 1.
-- [ ] follows_gt.flow: ground truth has personal Cursor/Trae intro, the Uncle Ben quote, then six challenges; generated has four failures and an explanation paragraph, "The fourth bullet belongs to a different category."
-- [ ] follows_gt.structure: ground truth has a callout quote and plain bullets; generated uses bold-lead bullets ("**Invented columns.**") and no quote.
+- [x] follows_gt.content: ground truth challenges are about using the tools (which LLM for which task, rate limits, prompt formats, context window, agent leash, MCPs); generated lists code failures ("Invented columns", "Repeated code"), which the ground truth puts under Example 1.
+- [x] follows_gt.flow: ground truth has personal Cursor/Trae intro, the Uncle Ben quote, then six challenges; generated has four failures and an explanation paragraph, "The fourth bullet belongs to a different category."
+- [x] follows_gt.structure: ground truth has a callout quote and plain bullets; generated uses bold-lead bullets ("**Invented columns.**") and no quote.
 
 #### "How can you leverage them for Football Analytics?"
 
 - [x] follows_gt.content: both give the three-file setup (rules.mdc, project_context.md, task log), Git before accepting suggestions, and indexing only necessary folders and docs.
 - [ ] follows_gt.flow: generated adds a long caveat that "`rules.mdc` is a Cursor convention" and a paragraph on version accuracy; ground truth has none of that and ends with a one-line flow summary, generated has a mermaid diagram instead.
-- [ ] follows_gt.structure: ground truth is a numbered list with nested numbered files; generated uses H3 per file ("### rules.mdc") plus a mermaid block.
+- [x] follows_gt.structure: ground truth is a numbered list with nested numbered files; generated uses H3 per file ("### rules.mdc") plus a mermaid block.
 
 #### "Football Examples"
 
 - [x] follows_gt.content: both cover the six-plot dashboard (coordinate confusion 0-100 vs 120x80, fixed by documenting dimensions) and the GPT-5 on-ball sequences with Dean Huijsen and about 39-43 m.
-- [ ] follows_gt.flow: ground truth walks the framework steps per example and the 3 prompting steps; generated skips them and adds a long distance-formula explanation ("take the difference on x, take the difference on y, square both").
-- [ ] follows_gt.structure: ground truth uses H5 per example, bulleted steps, and bold "challenges" and "takeaway"; generated uses H3 and plain prose with no bold callouts.
+- [x] follows_gt.flow: ground truth walks the framework steps per example and the 3 prompting steps; generated skips them and adds a long distance-formula explanation ("take the difference on x, take the difference on y, square both").
+- [x] follows_gt.structure: ground truth uses H5 per example, bulleted steps, and bold "challenges" and "takeaway"; generated uses H3 and plain prose with no bold callouts.
 
 #### "How to get reliable results from the models"
 
 - [x] follows_gt.content: both advise specific inputs and data specs, indexing context, and getting a plan or explanation before running (generated "Ask for a plan first").
-- [ ] follows_gt.flow: ground truth has 4 items in the order specific inputs, paste snippets, index, explain logic; generated has 5 in a different order and adds "Commit before you accept a suggestion".
+- [x] follows_gt.flow: ground truth has 4 items in the order specific inputs, paste snippets, index, explain logic; generated has 5 in a different order and adds "Commit before you accept a suggestion".
 - [x] follows_gt.structure: both are a plain bulleted list of short guidance items with no sub-headings or bold.
 
 #### "Quick comparison between Cursor vs Trae based on my experience"
 
 - [x] follows_gt.content: same facts per tool (Cursor Agent mode with Claude Sonnet 4, MCP, $20 Pro and quiet rate-limit change; Trae $3 then $10, 600 requests, Builder modes, SOLO waitlist).
-- [ ] follows_gt.flow: ground truth has one bulleted block per tool; generated uses a combined table plus two opinion paragraphs and a "verified in November 2025" note.
-- [ ] follows_gt.structure: ground truth uses H5 per tool with bullets; generated uses a markdown table, "| | Cursor | Trae |".
+- [x] follows_gt.flow: ground truth has one bulleted block per tool; generated uses a combined table plus two opinion paragraphs and a "verified in November 2025" note.
+- [x] follows_gt.structure: ground truth uses H5 per tool with bullets; generated uses a markdown table, "| | Cursor | Trae |".
 
 #### "Final thoughts"
 
-- [ ] follows_gt.content: ground truth closes on guardrails (index docs, sanity checks after every iteration, simple tests, state assumptions before coding); generated closes with one tip, "write `project_context.md`".
-- [ ] follows_gt.flow: ground truth goes summary, start small, guardrails, repeat the flow line; generated is a single short call to action.
-- [ ] follows_gt.structure: generated ends the section with a "* * *" separator and sign-off, "Till next time, Ricardo."; the ground truth section has neither.
+- [x] follows_gt.content: ground truth closes on guardrails (index docs, sanity checks after every iteration, simple tests, state assumptions before coding); generated closes with one tip, "write `project_context.md`".
+- [x] follows_gt.flow: ground truth goes summary, start small, guardrails, repeat the flow line; generated is a single short call to action.
+- [x] follows_gt.structure: generated ends the section with a "* * *" separator and sign-off, "Till next time, Ricardo."; the ground truth section has neither.
 
 ### UserIntent
 
 #### "Introduction"
 
-- [ ] user_intent.guideline_adherence: intent 1 wants a framing of the shift with a credible reference; generated adds an unrequested incident ("it renamed a column that three of my plots depended on") and "When I want to understand a piece of a project properly, I still write it by hand".
+- [x] user_intent.guideline_adherence: intent 1 wants a framing of the shift with a credible reference; generated adds an unrequested incident ("it renamed a column that three of my plots depended on") and "When I want to understand a piece of a project properly, I still write it by hand".
 - [ ] user_intent.research_anchoring: the column-rename incident and "twenty minutes debugging a chart" are not in the research; only the Karpathy claim is.
 
 #### "What is an agentic IDE?"
 
 - [x] user_intent.guideline_adherence: defines agentic IDEs in plain terms and lists what they offer (LLM providers, indexing, MCP, edits), as intent 2 asks.
-- [ ] user_intent.research_anchoring: "read your files, run commands and edit the code" adds "run commands", which the research does not mention; the sentence-finishing friend analogy is invented framing.
+- [x] user_intent.research_anchoring: "read your files, run commands and edit the code" adds "run commands", which the research does not mention; the sentence-finishing friend analogy is invented framing.
 
 #### "Where it breaks in practice"
 
 - [x] user_intent.guideline_adherence: lists the practical difficulties day to day (invented columns, coordinate systems, repeated code, changing model and plan terms).
-- [ ] user_intent.research_anchoring: "It rewrote the same matplotlib function four times in one file" and "picked the wrong one for a shot chart" add a count and a chart type the research does not give.
+- [x] user_intent.research_anchoring: "It rewrote the same matplotlib function four times in one file" and "picked the wrong one for a shot chart" add a count and a chart type the research does not give.
 
 #### "The setup I use on every project now"
 
-- [ ] user_intent.guideline_adherence: intent 4 wants a lightweight setup that works across tools; generated adds a Cursor-only caveat paragraph, a mermaid diagram and a version-accuracy digression.
-- [ ] user_intent.research_anchoring: "Trae, Claude Code and Gemini CLI each read their own file, with a different name" and the library list "pandas, matplotlib, seaborn" (seaborn) are not in the research.
+- [x] user_intent.guideline_adherence: intent 4 wants a lightweight setup that works across tools; generated adds a Cursor-only caveat paragraph, a mermaid diagram and a version-accuracy digression.
+- [x] user_intent.research_anchoring: "Trae, Claude Code and Gemini CLI each read their own file, with a different name" and the library list "pandas, matplotlib, seaborn" (seaborn) are not in the research.
 
 #### "Two football tasks"
 
-- [ ] user_intent.guideline_adherence: both tasks plus errors and the context fix are there, but a long distance-gain derivation ("square both, add them, take the square root") and a grid-comparison paragraph go well beyond the intent.
-- [ ] user_intent.research_anchoring: "The first run gave me a number I had no way to check", the scaling-to-metres derivation and "The endpoint pairs live in the event data" are not in the research.
+- [x] user_intent.guideline_adherence: both tasks plus errors and the context fix are there, but a long distance-gain derivation ("square both, add them, take the square root") and a grid-comparison paragraph go well beyond the intent.
+- [x] user_intent.research_anchoring: "The first run gave me a number I had no way to check", the scaling-to-metres derivation and "The endpoint pairs live in the event data" are not in the research.
 
 #### "How do I get reliable output? + Cursor vs Trae, honestly"
 
-- [ ] user_intent.guideline_adherence: guidance then comparison are both present, but generated adds a closing "Where to start" section and a recommendation paragraph not in intent 6.
-- [ ] user_intent.research_anchoring: "I verified the prices, request limits and model availability in November 2025" and "I pay for Cursor" are not in the research.
+- [x] user_intent.guideline_adherence: guidance then comparison are both present, but generated adds a closing "Where to start" section and a recommendation paragraph not in intent 6.
+- [x] user_intent.research_anchoring: "I verified the prices, request limits and model availability in November 2025" and "I pay for Cursor" are not in the research.
 
 ### VoiceAdherence
 
@@ -104,7 +104,7 @@ Anchor choice: the ground truth has no H2s (it uses H4 headings), so FollowsGT s
 - [x] voice.concrete_specifics: names Andrej Karpathy, the talk title, "three of my plots", "twenty minutes".
 - [x] voice.no_slop_vocabulary: no banned words found.
 - [x] voice.no_slop_structures: no banned opener or inversion structure found.
-- [ ] voice.spoken_rhythm_and_punctuation: "That failure is the price of how I write code now. Planning what I want ... Andrej Karpathy made the same point ..." is a three-sentence paragraph of about 70 words.
+- [x] voice.spoken_rhythm_and_punctuation: "That failure is the price of how I write code now. Planning what I want ... Andrej Karpathy made the same point ..." is a three-sentence paragraph of about 70 words.
 - [ ] voice.no_invented_biography: the opening incident ("it renamed a column that three of my plots depended on and told me the code was cleaner that way") is not in the research and looks invented; flip if it truly happened.
 
 #### "What is an agentic IDE?"
@@ -113,7 +113,7 @@ Anchor choice: the ground truth has no H2s (it uses H4 headings), so FollowsGT s
 - [x] voice.concrete_specifics: names Cursor, Trae, Claude Code, Gemini CLI and Model Context Protocol (MCP).
 - [x] voice.no_slop_vocabulary: no banned words found.
 - [x] voice.no_slop_structures: none found; the analogy is a plain comparison.
-- [ ] voice.spoken_rhythm_and_punctuation: "Across the tools I've tried, the feature list is roughly the same. You get several LLM providers inside one window, ..." runs about 53 words in one paragraph.
+- [x] voice.spoken_rhythm_and_punctuation: "Across the tools I've tried, the feature list is roughly the same. You get several LLM providers inside one window, ..." runs about 53 words in one paragraph.
 - [x] voice.no_invented_biography: only tool usage that the research supports.
 
 #### "Where it breaks in practice"

@@ -215,11 +215,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--sheet", type=Path, default=DEFAULT_SHEET)
     parser.add_argument("--outputs", type=Path, default=DEFAULT_OUTPUTS)
     parser.add_argument("--baseline-sheet", type=Path, default=None)
+    parser.add_argument("--slug", default=None, help="Only score posts whose slug starts with this prefix.")
     args = parser.parse_args(argv)
 
-    sheet_items = parse_sheet(args.sheet.read_text())
-    report = compare(sheet_items, parse_judges(args.outputs))
-    flips = baseline_flips(parse_sheet(args.baseline_sheet.read_text()), sheet_items) if args.baseline_sheet else None
+    def keep(items: list[Item]) -> list[Item]:
+        return [i for i in items if args.slug is None or i.slug.startswith(args.slug)]
+
+    sheet_items = keep(parse_sheet(args.sheet.read_text()))
+    report = compare(sheet_items, keep(parse_judges(args.outputs)))
+    flips = baseline_flips(keep(parse_sheet(args.baseline_sheet.read_text())), sheet_items) if args.baseline_sheet else None
     print(render(report, flips))
     return 0
 
