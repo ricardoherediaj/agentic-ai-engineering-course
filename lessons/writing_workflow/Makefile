@@ -65,6 +65,30 @@ brown-run-eval-pro: # Run the evaluation for Brown generating the articles with 
 		--workers 1 \
 		--read-from-cache
 
+# --- S1 protocol (Underdoc voice experiment, OpenCode Go fallback) ---
+
+S1_JUDGE ?= opencode_go:gpt-6-luna
+S1_REPEATS ?= 3
+S1_RUN = uv run python -m scripts.underdoc_run_eval --judge-model $(S1_JUDGE)
+
+s1-baseline: # S1: old (course) voice on the test split.
+	$(S1_RUN) --config configs/course-fallback.yaml --split test --experiment-name s1-baseline
+
+s1-new: # S1: new (Underdoc) voice on the test split.
+	$(S1_RUN) --config configs/underdoc-fallback.yaml --split test --experiment-name s1-new
+
+s1-noise-baseline: # S1: baseline repeats on the noise subset.
+	$(S1_RUN) --config configs/course-fallback.yaml --split test --noise-subset --repeats $(S1_REPEATS) --experiment-name s1-noise-baseline
+
+s1-noise-new: # S1: new-voice repeats on the noise subset.
+	$(S1_RUN) --config configs/underdoc-fallback.yaml --split test --noise-subset --repeats $(S1_REPEATS) --experiment-name s1-noise-new
+
+s1-summary: # S1: baseline vs new vs noise table from outputs/s1/*/scores.json.
+	uv run python -m scripts.s1_summary \
+		--baseline outputs/s1/s1-baseline-r1 --new outputs/s1/s1-new-r1 \
+		$(foreach d,$(wildcard outputs/s1/s1-noise-baseline-r*),--noise-baseline $(d)) \
+		$(foreach d,$(wildcard outputs/s1/s1-noise-new-r*),--noise-new $(d))
+
 # --- Tests & QA ---
 
 tests: # Run tests.
