@@ -70,9 +70,10 @@ class VoiceAdherenceCriterionScores(CriteriaScores):
     )
     no_invented_biography: CriterionScore = pydantic.Field(
         description=(
-            "1 if the section makes no biographical or experiential claim beyond what is stated in the article or the "
-            "author profile (solo author, medicine to tech, football analytics, ...). 0 if it invents a team, "
-            "a method, past events or advice received. "
+            "1 if every biographical or first-person experiential claim (something the author did, owns, pays for, "
+            "verified, felt, at a time or place) is supported by the article guideline or the research, or is a stable "
+            "author-profile fact. 0 if any such claim is unsupported, or if it invents a team, a method or advice "
+            "received. Generic opinions ('I think', 'I recommend') are fine. "
             "Source: tonality_profile 'Never invent a biographical premise'."
         )
     )
@@ -116,15 +117,33 @@ class VoiceAdherenceMetricFewShotExample(BaseExample):
 
     output: str
     scores: VoiceAdherenceArticleScores
+    guideline: str | None = None
+    research: str | None = None
 
     @classmethod
-    def from_markdown(cls, output_file: Path, scores: VoiceAdherenceArticleScores) -> "VoiceAdherenceMetricFewShotExample":
-        """Create an example from a markdown file and its labeled scores."""
-        return cls(output=output_file.read_text(), scores=scores)
+    def from_markdown(
+        cls,
+        output_file: Path,
+        scores: VoiceAdherenceArticleScores,
+        guideline: str | None = None,
+        research: str | None = None,
+    ) -> "VoiceAdherenceMetricFewShotExample":
+        """Create an example from a markdown file and its labeled scores (optionally with its guideline and research)."""
+        return cls(output=output_file.read_text(), scores=scores, guideline=guideline, research=research)
 
     def to_context(self) -> str:
         """Convert the example to a formatted string for use as context in prompts."""
-        return f"""
+        support = ""
+        if self.guideline is not None or self.research is not None:
+            support = f"""
+<article_guideline>
+{self.guideline or ""}
+</article_guideline>
+<research>
+{self.research or ""}
+</research>
+"""
+        return f"""{support}
 <output>
 {self.output}
 </output>

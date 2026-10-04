@@ -59,15 +59,30 @@ tag sentence that restates the previous one, or the Everyone/Nobody hook. Vocabu
 5. **spoken_rhythm_and_punctuation** (rules: paragraph statistics and punctuation): paragraphs are short, mostly one to two 
 sentences, never more than four and roughly under 45 words, and the section has no em dashes ("—") and no semicolons. Score 0 
 if the section has long polished paragraphs, an em dash or a semicolon.
-6. **no_invented_biography** (rule: never invent a biographical premise): the author is a solo writer. Score 0 if the section 
-claims a team, a deliberate method, past events, advice received or credentials that the article itself does not support. Reasonable
-first-person facts the article itself states (for example a career move from medicine to tech) are fine.
+6. **no_invented_biography** (rule: never invent a biographical premise): the author is a solo writer. Score 0 if the section
+contains ANY biographical or first-person experiential claim, meaning something the author did, owns, pays for, verified, tested,
+asked, felt, or lived at a specific time or place ("I pay for Cursor", "I verified the prices in November 2025", "I asked the
+agent"), that is NOT supported by the article guideline or the research below. Also score 0 for an invented team, method,
+advice received or credential. The article cannot vouch for itself: a claim being stated directly in the article is NOT support.
+Look for the claim in the guideline or research; if it is not there, score 0. Stable identity facts in the voice rules'
+author profile (solo author, career move from medicine to tech, football analytics) count as supported. Generic first-person
+opinions and recommendations ("I think", "I recommend", "I prefer short functions") are not biographical claims and are fine.
 
 ## VOICE RULES (authoritative source for every criterion)
 
 <voice_rules>
 {voice_rules}
 </voice_rules>
+
+## ARTICLE GUIDELINE AND RESEARCH (the only support for biographical claims)
+
+<article_guideline>
+{guideline}
+</article_guideline>
+
+<research>
+{research}
+</research>
 
 ## FEW-SHOT EXAMPLES
 
@@ -275,6 +290,49 @@ RAG_OFF_VOICE_SCORES = VoiceAdherenceArticleScores(
     ]
 )
 
+# --- Biography grounding: same claims, one supported by the guideline/research and one not ---
+
+BIOGRAPHY_GUIDELINE = """Write a short post on using an agentic IDE for football analytics.
+Anchor: Ricardo has a Cursor Pro subscription (20 USD/month, checked on the Cursor pricing page in November 2025).
+Anchor: he asked the agent to refactor the xG pipeline and it touched 14 files."""
+
+BIOGRAPHY_RESEARCH = """Cursor pricing page (retrieved 2025-11-12): Pro plan, 20 USD per month.
+Author notes: the xG pipeline refactor was run through the Cursor agent and touched 14 files."""
+
+BIOGRAPHY_GROUNDED_SCORES = VoiceAdherenceArticleScores(
+    sections=[
+        _section(
+            "What the Agent Costs",
+            (1, "'I pay for Cursor', 'I checked the prices': singular first person."),
+            (1, "Names Cursor, the Pro plan and '20 USD a month'."),
+            (1, "No banned vocabulary."),
+            (1, "No banned opener, transition or inversion."),
+            (1, "Short paragraphs, no em dash or semicolon."),
+            (
+                1,
+                "'I pay for Cursor' and 'I checked the prices in November 2025' are both in the guideline and research (Cursor Pro, 20 USD, November 2025). 'I think it is worth it' is a generic opinion.",
+            ),
+        ),
+    ]
+)
+
+BIOGRAPHY_UNSUPPORTED_SCORES = VoiceAdherenceArticleScores(
+    sections=[
+        _section(
+            "What the Agent Costs",
+            (1, "'I pay', 'I tested': singular first person."),
+            (1, "Names Cursor, Copilot, '10 USD a month' and 'March 2024'."),
+            (1, "No banned vocabulary."),
+            (1, "No banned opener, transition or inversion."),
+            (1, "Short paragraphs, no em dash or semicolon."),
+            (
+                0,
+                "'I also pay for Copilot' and 'I tested it for six months in March 2024' are experiential claims that appear nowhere in the guideline or research, even though the article states them directly. 'I recommend starting with the free tier' would be fine, but these two claims are invented.",
+            ),
+        ),
+    ]
+)
+
 DEFAULT_FEW_SHOT_EXAMPLES = VoiceAdherenceMetricFewShotExamples(
     examples=[
         VoiceAdherenceMetricFewShotExample.from_markdown(
@@ -289,14 +347,31 @@ DEFAULT_FEW_SHOT_EXAMPLES = VoiceAdherenceMetricFewShotExamples(
         VoiceAdherenceMetricFewShotExample.from_markdown(
             output_file=EXAMPLES_DIR / "rag_etl" / "article_off_voice.md", scores=RAG_OFF_VOICE_SCORES
         ),
+        VoiceAdherenceMetricFewShotExample.from_markdown(
+            output_file=EXAMPLES_DIR / "biography" / "article_grounded.md",
+            scores=BIOGRAPHY_GROUNDED_SCORES,
+            guideline=BIOGRAPHY_GUIDELINE,
+            research=BIOGRAPHY_RESEARCH,
+        ),
+        VoiceAdherenceMetricFewShotExample.from_markdown(
+            output_file=EXAMPLES_DIR / "biography" / "article_unsupported.md",
+            scores=BIOGRAPHY_UNSUPPORTED_SCORES,
+            guideline=BIOGRAPHY_GUIDELINE,
+            research=BIOGRAPHY_RESEARCH,
+        ),
     ]
 )
+
+
+NOT_PROVIDED = "(not provided: no biographical or experiential claim can be supported, so any such claim scores 0)"
 
 
 def get_eval_prompt(
     output: str,
     voice_rules: str,
     few_shot_examples: VoiceAdherenceMetricFewShotExamples,
+    guideline: str | None = None,
+    research: str | None = None,
 ) -> str:
     """Generate the evaluation prompt for the voice_adherence metric.
 
@@ -304,6 +379,8 @@ def get_eval_prompt(
         output: The generated article to be evaluated.
         voice_rules: The voice profile text embedded as the authoritative rule source.
         few_shot_examples: Labeled examples to guide the judge.
+        guideline: The article guideline the article was generated from (support for biographical claims).
+        research: The research the article was generated from (support for biographical claims).
 
     Returns:
         The complete formatted prompt string ready for LLM invocation.
@@ -312,5 +389,7 @@ def get_eval_prompt(
     return SYSTEM_PROMPT.format(
         examples=few_shot_examples.to_context(),
         voice_rules=voice_rules,
+        guideline=guideline or NOT_PROVIDED,
+        research=research or NOT_PROVIDED,
         output=output,
     )

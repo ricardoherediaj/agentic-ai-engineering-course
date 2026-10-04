@@ -91,6 +91,53 @@ def test_prompt_contains_criteria_and_voice_rules(mixed_scores: VoiceAdherenceAr
     assert "GENERATED FILE" not in prompt
 
 
+def test_prompt_includes_guideline_and_research(mixed_scores: VoiceAdherenceArticleScores) -> None:
+    metric = make_metric(mixed_scores)
+    prompt = prompts.get_eval_prompt(
+        output="MY ARTICLE",
+        voice_rules=metric.voice_rules,
+        few_shot_examples=metric.few_shot_examples,
+        guideline="GUIDELINE-MARKER",
+        research="RESEARCH-MARKER",
+    )
+    assert "GUIDELINE-MARKER" in prompt
+    assert "RESEARCH-MARKER" in prompt
+    assert "NOT supported by the article guideline or the research" in prompt
+    assert "not provided" not in prompt.split("## FEW-SHOT EXAMPLES")[0].split("<article_guideline>")[1]
+
+
+def test_prompt_without_support_says_not_provided(mixed_scores: VoiceAdherenceArticleScores) -> None:
+    metric = make_metric(mixed_scores)
+    prompt = prompts.get_eval_prompt(output="A", voice_rules=metric.voice_rules, few_shot_examples=metric.few_shot_examples)
+    assert "(not provided" in prompt
+
+
+def test_unsupported_claim_example_is_a_zero_and_grounded_is_a_one() -> None:
+    grounded, unsupported = prompts.DEFAULT_FEW_SHOT_EXAMPLES.examples[-2:]
+    assert grounded.scores.sections[0].scores.no_invented_biography.score == 1
+    assert unsupported.scores.sections[0].scores.no_invented_biography.score == 0
+    assert "I tested it for six months" in unsupported.output
+    assert "Copilot" not in (unsupported.guideline or "") + (unsupported.research or "")
+    assert "<article_guideline>" in unsupported.to_context()
+
+
+@pytest.mark.asyncio
+async def test_ascore_forwards_guideline_and_research(mixed_scores: VoiceAdherenceArticleScores) -> None:
+    metric = make_metric(mixed_scores)
+    captured = {}
+    real = prompts.get_eval_prompt
+
+    def spy(**kwargs):
+        captured.update(kwargs)
+        return real(**kwargs)
+
+    from unittest.mock import patch
+
+    with patch("brown.evals.metrics.voice_adherence.metric.prompts.get_eval_prompt", side_effect=spy):
+        await metric.ascore(output="A", input="G", context={"research": "R", "debug": False})
+    assert captured["guideline"] == "G" and captured["research"] == "R"
+
+
 def test_voice_rules_path_is_configurable(tmp_path, mixed_scores: VoiceAdherenceArticleScores) -> None:
     for name in prompts.VOICE_PROFILE_FILES:
         (tmp_path / name).write_text(f"CUSTOM RULES {name}")
@@ -104,11 +151,11 @@ def test_voice_rules_path_is_configurable(tmp_path, mixed_scores: VoiceAdherence
 
 def test_few_shot_examples_are_valid_and_cover_on_and_off_voice() -> None:
     examples = prompts.DEFAULT_FEW_SHOT_EXAMPLES.examples
-    assert len(examples) == 4
+    assert len(examples) == 6
     for example in examples:
         assert example.output.strip()
         assert example.scores.sections
-    assert "<example_4>" in prompts.DEFAULT_FEW_SHOT_EXAMPLES.to_context()
+    assert "<example_6>" in prompts.DEFAULT_FEW_SHOT_EXAMPLES.to_context()
 
 
 def test_registry_exposes_voice_adherence(mixed_scores: VoiceAdherenceArticleScores) -> None:

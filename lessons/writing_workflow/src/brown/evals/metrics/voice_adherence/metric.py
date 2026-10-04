@@ -54,11 +54,19 @@ class VoiceAdherenceMetricLLMJudge(BrownBaseMetric):
         self.profiles_dir = Path(profiles_dir) if profiles_dir else DEFAULT_PROFILES_DIR
         self.voice_rules = prompts.load_voice_rules(self.profiles_dir)
 
-    async def ascore(self, output: str, **ignored_kwargs: Any) -> score_result.ScoreResult | list[score_result.ScoreResult]:
+    async def ascore(
+        self,
+        output: str,
+        input: str | None = None,
+        context: dict[str, Any] | None = None,
+        **ignored_kwargs: Any,
+    ) -> score_result.ScoreResult | list[score_result.ScoreResult]:
         """Score the generated article against the voice rules.
 
         Args:
             output: The generated article (Markdown).
+            input: The article guideline. Support for biographical claims (`no_invented_biography`).
+            context: Dict with a "research" key. Support for biographical claims (`no_invented_biography`).
             **ignored_kwargs: Ignored (e.g. expected_output; no ground truth needed).
 
         Returns:
@@ -71,6 +79,8 @@ class VoiceAdherenceMetricLLMJudge(BrownBaseMetric):
             output=output,
             voice_rules=self.voice_rules,
             few_shot_examples=self.few_shot_examples,
+            guideline=input,
+            research=(context or {}).get("research"),
         )
         response = cast(
             VoiceAdherenceArticleScores,
