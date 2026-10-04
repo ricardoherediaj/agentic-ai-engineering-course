@@ -97,6 +97,39 @@ class Pong(BaseModel):
     answer: str
 
 
+class DiagramShape(BaseModel):
+    """Mirrors `GeneratedMermaidDiagram`."""
+
+    content: str
+    caption: str
+
+
+def _build(model):
+    settings = make_settings(OPENCODE_API_KEY="injected-test-key")
+    with patch("brown.models.get_model.get_settings", return_value=settings):
+        return get_model(model)
+
+
+def test_deepseek_structured_output_defaults_to_function_calling() -> None:
+    from brown.models.get_model import FunctionCallingChatOpenAI
+
+    llm = _build(SupportedModels.OPENCODE_GO_DEEPSEEK_V41_FLASH)
+    assert isinstance(llm, FunctionCallingChatOpenAI)
+    with patch.object(ChatOpenAI, "with_structured_output", return_value="x") as parent:
+        llm.with_structured_output(Pong)
+        assert parent.call_args.kwargs["method"] == "function_calling"
+        llm.with_structured_output(Pong, method="json_mode")
+        assert parent.call_args.kwargs["method"] == "json_mode"
+
+
+def test_gpt_luna_is_plain_chat_openai() -> None:
+    from brown.models.get_model import FunctionCallingChatOpenAI
+
+    llm = _build(SupportedModels.OPENCODE_GO_GPT_6_LUNA)
+    assert type(llm) is ChatOpenAI
+    assert not isinstance(llm, FunctionCallingChatOpenAI)
+
+
 @pytest.mark.parametrize("model", [SupportedModels.OPENCODE_GO_GPT_6_LUNA, SupportedModels.OPENCODE_GO_DEEPSEEK_V41_FLASH])
 def test_opencode_live_smoke(model) -> None:
     """One tiny structured-output call per model. Skipped without OPENCODE_API_KEY in settings."""
@@ -108,3 +141,15 @@ def test_opencode_live_smoke(model) -> None:
     result = llm.invoke("Reply with the single word: pong")
     assert isinstance(result, Pong)
     assert result.answer
+
+
+def test_deepseek_live_smoke_diagram_shape() -> None:
+    """Structured output shaped like `GeneratedMermaidDiagram` must work on DeepSeek (no json_schema)."""
+    from brown.config import get_settings
+
+    if not get_settings().OPENCODE_API_KEY:
+        pytest.skip("OPENCODE_API_KEY not available in settings")
+    llm = get_model(SupportedModels.OPENCODE_GO_DEEPSEEK_V41_FLASH).with_structured_output(DiagramShape, include_raw=False)
+    result = llm.invoke("Generate a tiny mermaid flowchart A to B. content is the fenced mermaid block, caption a short description.")
+    assert isinstance(result, DiagramShape)
+    assert result.content and result.caption

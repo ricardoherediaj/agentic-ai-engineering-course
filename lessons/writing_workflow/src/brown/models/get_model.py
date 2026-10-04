@@ -3,6 +3,7 @@ import uuid
 
 from langchain.chat_models import init_chat_model
 from langchain_core.language_models import BaseChatModel
+from langchain_openai import ChatOpenAI
 
 from brown.config import get_settings
 
@@ -33,9 +34,17 @@ OPENCODE_GO_RESPONSES_MODELS = {SupportedModels.OPENCODE_GO_GPT_6_LUNA}
 _GEMINI_ONLY_KEYS = ("thinking_budget", "thinking_level", "response_modalities")
 
 
-def _get_opencode_go_model(model: SupportedModels, config: ModelConfig) -> BaseChatModel:
-    from langchain_openai import ChatOpenAI
+class FunctionCallingChatOpenAI(ChatOpenAI):
+    """ChatOpenAI whose `with_structured_output` defaults to tool calling.
 
+    DeepSeek on OpenCode Go rejects `response_format` json_schema (400), but supports tool calling.
+    """
+
+    def with_structured_output(self, schema=None, *, method=None, **kwargs):
+        return super().with_structured_output(schema, method=method or "function_calling", **kwargs)
+
+
+def _get_opencode_go_model(model: SupportedModels, config: ModelConfig) -> BaseChatModel:
     api_key = get_settings().OPENCODE_API_KEY
     if not api_key:
         raise ValueError("Required environment variable `OPENCODE_API_KEY` is not set (needed for `opencode_go:` models)")
@@ -49,7 +58,8 @@ def _get_opencode_go_model(model: SupportedModels, config: ModelConfig) -> BaseC
         kwargs.pop("temperature", None)
         kwargs.pop("n", None)
 
-    return ChatOpenAI(
+    chat_cls = ChatOpenAI if use_responses_api else FunctionCallingChatOpenAI
+    return chat_cls(
         model=model.value.removeprefix(OPENCODE_GO_PREFIX),
         base_url=OPENCODE_GO_BASE_URL,
         api_key=api_key,
