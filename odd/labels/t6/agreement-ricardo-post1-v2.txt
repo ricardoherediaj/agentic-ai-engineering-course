@@ -1,0 +1,59 @@
+Agreement (sheet vs judge)
+  follows_gt   0/3 = 0.0%
+  user_intent  9/12 = 75.0%
+  voice        40/48 = 83.3%
+  overall      49/63 = 77.8%
+
+Disagreements: 14
+- [2025-08-12…ll-analytics] follows_gt.content · 'Introduction': sheet=1 judge=0 (judge section 'Introduction')
+    judge reason: Both articles address agentic IDEs for football analytics and share the Cursor/Trae comparison, project-context files, and two football examples. However, the generated article omits substantial expected material, including the overview of IDE capabilities and challenges, several workflow details, a
+- [2025-08-12…ll-analytics] follows_gt.flow · 'Introduction': sheet=1 judge=0 (judge section 'Introduction')
+    judge reason: The generated article opens with a personal debugging anecdote and reorganizes the material into a different progression. Although it covers related setup advice, football examples, reliability tips, and a tool comparison, it omits or reshapes expected transitions and material, including the initial
+- [2025-08-12…ll-analytics] follows_gt.structure · 'Introduction': sheet=1 judge=0 (judge section 'Introduction')
+    judge reason: The expected article has no H2 sections and uses H4 headings, numbered steps, bullets, and a block quote. The generated article instead divides the content with multiple H2 headings, adds a table and Mermaid diagram, and changes the list and heading hierarchy. These are substantial structural and fo
+- [2025-08-12…ll-analytics] user_intent.research_anchoring · 'The setup I use on every project now': sheet=1 judge=0 (judge section 'Propose a lightweight, repeatable project setup')
+    judge reason: The three-file setup, Git practice, and selective indexing are grounded in the research dossier. However, the claims that other tools use differently named and located rule files and that the agent reads the task log before each new session are not established by the provided research.
+- [2025-08-12…ll-analytics] user_intent.research_anchoring · 'Two football tasks': sheet=1 judge=0 (judge section 'Illustrate the setup with two football tasks')
+    judge reason: The dashboard errors and the Salzburg–Real Madrid example, including GPT-5 in Cursor and the approximate 39–43 m results, are supported by the research dossier. The specific event and coordinate columns, the claimed context fix for the second task, and the detailed calculation and manual-verificatio
+- [2025-08-12…ll-analytics] user_intent.research_anchoring · 'How do I get reliable output? + Cursor vs Trae, honestly': sheet=1 judge=0 (judge section 'Give reliability guidance and compare Cursor and Trae')
+    judge reason: The main comparison points—Cursor’s model range, Agent mode and MCP setup, its $20 plan and changed rate limits, and Trae’s pricing, request allowance, Builder modes, marketplace, and SOLO waitlist—are supported by the research dossier. The November 2025 verification date and personal claims about w
+- [2025-08-12…ll-analytics] voice.concrete_specifics · 'What is an agentic IDE?': sheet=1 judge=0 (judge section 'What is an agentic IDE?')
+    judge reason: Although it names “Cursor,” “Trae,” “Claude Code” and “Gemini CLI,” it also relies on abstractions such as “several LLM providers” and “the feature list is roughly the same,” without exact counts.
+- [2025-08-12…ll-analytics] voice.no_invented_biography · 'What is an agentic IDE?': sheet=1 judge=0 (judge section 'What is an agentic IDE?')
+    judge reason: “Across the tools I've tried” and “the two I've used the most” claim personal tool use not supported by the guideline or research.
+- [2025-08-12…ll-analytics] voice.no_invented_biography · 'The setup I use on every project now': sheet=1 judge=0 (judge section 'The setup I use on every project now')
+    judge reason: The section presents unsupported personal practices in “Mine says,” “I adapted the structure,” “I initialise Git,” and “I index only the folders.” The research describes these as setup recommendations, not as Ricardo’s own established habits.
+- [2025-08-12…ll-analytics] voice.no_invented_biography · 'Two football tasks': sheet=0 judge=1 (judge section 'Two football tasks')
+    judge reason: The dashboard errors, coordinate context, GPT-5 in Cursor, Salzburg vs Real Madrid task, Dean Huijsen pass, and distance estimates are supported by the research.
+- [2025-08-12…ll-analytics] voice.no_slop_structures · 'The setup I use on every project now': sheet=1 judge=0 (judge section 'The setup I use on every project now')
+    judge reason: The sentence “Three files set the constraints, two habits keep the changes reversible and the library versions current” restates and labels the preceding diagram as a trailing tag sentence.
+- [2025-08-12…ll-analytics] voice.spoken_rhythm_and_punctuation · 'Introduction': sheet=1 judge=0 (judge section 'Introduction')
+    judge reason: The paragraph beginning “That failure is the price” runs to three sentences and roughly 60 words, over the paragraph-length guideline.
+- [2025-08-12…ll-analytics] voice.spoken_rhythm_and_punctuation · 'Cursor vs Trae, honestly': sheet=0 judge=1 (judge section 'Cursor vs Trae, honestly')
+    judge reason: The prose paragraphs are short, and the section has no em dash or semicolon.
+- [2025-08-12…ll-analytics] voice.spoken_rhythm_and_punctuation · 'Where to start': sheet=0 judge=1 (judge section 'Where to start')
+    judge reason: The section is short and has no em dash or semicolon.
+
+Unmatched sheet items: 21
+- [2025-08-12…ll-analytics] follows_gt.content · 'What are Agentic IDEs?'
+- [2025-08-12…ll-analytics] follows_gt.content · 'What are their main challenges?'
+- [2025-08-12…ll-analytics] follows_gt.content · 'How can you leverage them for Football Analytics?'
+- [2025-08-12…ll-analytics] follows_gt.content · 'Football Examples'
+- [2025-08-12…ll-analytics] follows_gt.content · 'How to get reliable results from the models'
+- [2025-08-12…ll-analytics] follows_gt.content · 'Quick comparison between Cursor vs Trae based on my experience'
+- [2025-08-12…ll-analytics] follows_gt.content · 'Final thoughts'
+- [2025-08-12…ll-analytics] follows_gt.flow · 'What are Agentic IDEs?'
+- [2025-08-12…ll-analytics] follows_gt.flow · 'What are their main challenges?'
+- [2025-08-12…ll-analytics] follows_gt.flow · 'How can you leverage them for Football Analytics?'
+- [2025-08-12…ll-analytics] follows_gt.flow · 'Football Examples'
+- [2025-08-12…ll-analytics] follows_gt.flow · 'How to get reliable results from the models'
+- [2025-08-12…ll-analytics] follows_gt.flow · 'Quick comparison between Cursor vs Trae based on my experience'
+- [2025-08-12…ll-analytics] follows_gt.flow · 'Final thoughts'
+- [2025-08-12…ll-analytics] follows_gt.structure · 'What are Agentic IDEs?'
+- [2025-08-12…ll-analytics] follows_gt.structure · 'What are their main challenges?'
+- [2025-08-12…ll-analytics] follows_gt.structure · 'How can you leverage them for Football Analytics?'
+- [2025-08-12…ll-analytics] follows_gt.structure · 'Football Examples'
+- [2025-08-12…ll-analytics] follows_gt.structure · 'How to get reliable results from the models'
+- [2025-08-12…ll-analytics] follows_gt.structure · 'Quick comparison between Cursor vs Trae based on my experience'
+- [2025-08-12…ll-analytics] follows_gt.structure · 'Final thoughts'
+Unmatched judge items: 0
