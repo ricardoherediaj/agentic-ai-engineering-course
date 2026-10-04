@@ -26,7 +26,11 @@ EXIT_PROVIDER_UNAVAILABLE = 75
 
 
 def _config_fingerprint(config: Path) -> dict:
-    return {"config": config.name, "config_sha": hashlib.sha256(config.read_bytes()).hexdigest()[:12]}
+    return {
+        "config": config.name,
+        "config_sha": hashlib.sha256(config.read_bytes()).hexdigest()[:12],
+        "generator_code": s1.generator_code_version(),
+    }
 
 
 def _generate(sample_dir: Path, sample, work_dir: Path) -> str:
@@ -180,7 +184,10 @@ def main(
                     if reason:
                         skipped.setdefault(meta["name"], {})[name] = reason
                         continue
-                    judge_cache = s1.ItemCache(sample_dir, {"judge": judge_model, "metric": name, "article": article_sha})
+                    judge_cache = s1.ItemCache(
+                        sample_dir,
+                        {"judge": judge_model, "metric": name, "metric_version": s1.metric_version(name), "article": article_sha},
+                    )
                     raw = judge_cache.get_or_compute(
                         f"judge_{name}.json", lambda n=name, s=sample, a=article: _judge(metric_objs[n], s, a), retries=retries
                     )

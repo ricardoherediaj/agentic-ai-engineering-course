@@ -172,3 +172,58 @@ def test_apply_config_file_raises_on_mismatch(monkeypatch) -> None:
     monkeypatch.setattr(s1, "_resolved_config_file", lambda: Path("configs/course-gemini-flash.yaml").resolve())
     with pytest.raises(RuntimeError, match="CONFIG_FILE"):
         s1.apply_config_file(Path("configs/underdoc-fallback.yaml"))
+
+
+def _make_metric_pkg(root: Path, prompt: str = "p", example: str = "e") -> None:
+    pkg = root / "m"
+    (pkg / "examples" / "x").mkdir(parents=True, exist_ok=True)
+    (pkg / "prompts.py").write_text(prompt)
+    (pkg / "types.py").write_text("t")
+    (pkg / "examples" / "x" / "a.md").write_text(example)
+
+
+def test_metric_version_changes_with_rubric_and_is_stable_otherwise(tmp_path: Path) -> None:
+    _make_metric_pkg(tmp_path)
+    base = s1.metric_version("m", tmp_path)
+    assert s1.metric_version("m", tmp_path) == base
+    (tmp_path / "m" / "prompts.py").write_text("p2")
+    assert s1.metric_version("m", tmp_path) != base
+    _make_metric_pkg(tmp_path, example="e2")
+    assert s1.metric_version("m", tmp_path) != base
+
+
+def test_judge_cache_invalidates_on_metric_version(tmp_path: Path) -> None:
+    _make_metric_pkg(tmp_path)
+    calls = []
+
+    def judge(version: str) -> str:
+        cache = s1.ItemCache(tmp_path / "out", {"judge": "j", "metric": "m", "metric_version": version, "article": "a"})
+        return cache.get_or_compute("judge_m.json", lambda: calls.append(1) or "r", retries=0)
+
+    judge(s1.metric_version("m", tmp_path))
+    judge(s1.metric_version("m", tmp_path))
+    assert len(calls) == 1  # unchanged rubric hits the cache
+    (tmp_path / "m" / "prompts.py").write_text("changed")
+    judge(s1.metric_version("m", tmp_path))
+    assert len(calls) == 2  # changed rubric re-judges
+
+
+def test_real_metrics_have_versions() -> None:
+    for name in ("follows_gt", "user_intent", "voice_adherence"):
+        assert len(s1.metric_version(name)) == 12
+
+
+def test_generator_code_version_tracks_get_model(tmp_path: Path) -> None:
+    f = tmp_path / "get_model.py"
+    f.write_text("a")
+    base = s1.generator_code_version((f,))
+    assert s1.generator_code_version((f,)) == base
+    f.write_text("b")
+    assert s1.generator_code_version((f,)) != base
+    assert len(s1.generator_code_version()) == 12
+
+
+def test_runner_keys_include_versions() -> None:
+    src = (ROOT / "scripts" / "underdoc_run_eval.py").read_text()
+    assert "s1.generator_code_version()" in src
+    assert "s1.metric_version(name)" in src

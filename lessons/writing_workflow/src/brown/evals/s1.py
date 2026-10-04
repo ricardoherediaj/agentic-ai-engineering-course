@@ -83,6 +83,33 @@ def with_backoff(
     raise AssertionError("unreachable")
 
 
+METRICS_DIR = Path(__file__).parent / "metrics"
+GENERATOR_CODE_FILES = (Path(__file__).parents[1] / "models" / "get_model.py",)
+
+
+def _hash_files(files: list[Path], root: Path) -> str:
+    digest = hashlib.sha256()
+    for file in sorted(files):
+        digest.update(file.relative_to(root).as_posix().encode())
+        digest.update(file.read_bytes())
+    return digest.hexdigest()[:12]
+
+
+def metric_version(metric: str, metrics_dir: Path = METRICS_DIR) -> str:
+    """Hash of a metric's rubric: `prompts.py`, `types.py` and every file under `examples/`.
+
+    A changed rubric changes the version, so cached judge results are recomputed.
+    """
+    package = metrics_dir / metric
+    files = [package / "prompts.py", package / "types.py", *(f for f in (package / "examples").rglob("*") if f.is_file())]
+    return _hash_files([f for f in files if f.is_file()], package)
+
+
+def generator_code_version(files: tuple[Path, ...] = GENERATOR_CODE_FILES) -> str:
+    """Hash of the generator-side code that shapes model calls, so articles made before a fix are regenerated."""
+    return _hash_files(list(files), files[0].parent)
+
+
 def hash_key(key: dict[str, Any]) -> str:
     return hashlib.sha256(json.dumps(key, sort_keys=True, default=str).encode()).hexdigest()[:16]
 
