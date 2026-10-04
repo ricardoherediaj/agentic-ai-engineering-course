@@ -227,3 +227,12 @@ def test_runner_keys_include_versions() -> None:
     src = (ROOT / "scripts" / "underdoc_run_eval.py").read_text()
     assert "s1.generator_code_version()" in src
     assert "s1.metric_version(name)" in src
+
+
+def test_current_item_ids_keeps_only_this_runs_samples() -> None:
+    spec = importlib.util.spec_from_file_location("underdoc_run_eval", Path("scripts/underdoc_run_eval.py"))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    items = [{"id": "a", "name": "Post A"}, {"id": "x", "name": "Other run"}, {"id": "a2", "name": "Post A"}, {"id": "b", "name": "Post B"}]
+
+    assert mod._current_item_ids(items, {"Post A": {}, "Post B": {}}) == ["a", "b"]

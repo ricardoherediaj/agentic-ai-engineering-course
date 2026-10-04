@@ -74,6 +74,16 @@ def _criterion_scores(raw: str, metric_name: str) -> dict[str, float]:
     return {name.removeprefix(f"{metric_name}_"): v["score"] for name, v in json.loads(raw).items()}
 
 
+def _current_item_ids(items: list[dict], by_name: dict[str, dict]) -> list[str]:
+    """Ids of dataset items that belong to the current run (first match per name)."""
+    ids: dict[str, str] = {}
+    for item in items:
+        name = item.get("name")
+        if name in by_name and name not in ids:
+            ids[name] = item["id"]
+    return list(ids.values())
+
+
 def _log_to_opik(experiment: str, dataset_name: str, rows: list[dict], metric_names: list[str]) -> None:
     """Best-effort: register the cached results as an Opik experiment. Never fails the run."""
     try:
@@ -97,11 +107,15 @@ def _log_to_opik(experiment: str, dataset_name: str, rows: list[dict], metric_na
 
         dataset = opik.Opik().get_or_create_dataset(dataset_name)
         dataset.insert([{"name": r["name"], "input": r["input"]} for r in rows])
+        # The shared dataset also holds items from other runs; score only this run's samples.
+        item_ids = _current_item_ids(dataset.get_items(), by_name)
         evaluation.evaluate(
             dataset=dataset,
             task=lambda item: {"output": by_name[item["name"]]["article"]},
             scoring_metrics=[CachedMetric(name=m) for m in metric_names],
             experiment_name=experiment,
+            project_name="underdoc-s1",
+            dataset_item_ids=item_ids,
         )
     except Exception as e:  # noqa: BLE001
         logger.warning(f"Opik logging skipped for `{experiment}`: {e}")
