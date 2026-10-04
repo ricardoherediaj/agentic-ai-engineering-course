@@ -137,3 +137,40 @@ def write_scores(
     payload = {"experiment": experiment, "opik_experiment": experiment, "samples": samples, "skipped": skipped or {}, **(extra or {})}
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
     return path
+
+
+def _resolved_config_file() -> Path:
+    from brown.config import get_settings
+
+    return Path(get_settings().CONFIG_FILE).resolve()
+
+
+def apply_config_file(config_file: Path) -> Any:
+    """Point Brown at `config_file` and return the loaded app config.
+
+    `import brown` calls `get_settings()` at import time, which caches the default config before a CLI
+    option can set `CONFIG_FILE`. Clear both caches after setting the env var and fail loudly if the
+    resolved file still differs, so a run can never silently use the wrong provider.
+    """
+    import os
+
+    from brown.config import get_settings
+    from brown.config_app import get_app_config
+
+    os.environ["CONFIG_FILE"] = str(config_file)
+    get_settings.cache_clear()
+    get_app_config.cache_clear()
+    resolved = _resolved_config_file()
+    if resolved != Path(config_file).resolve():
+        raise RuntimeError(f"CONFIG_FILE mismatch: requested {Path(config_file).resolve()}, Brown resolved {resolved}")
+    return get_app_config()
+
+
+def config_model_ids(app_config: Any) -> set[str]:
+    """All model ids an app config uses, including node tools."""
+    ids = set()
+    for node in app_config.nodes.values():
+        ids.add(node.model_id.value)
+        for tool in (getattr(node, "tools", None) or {}).values():
+            ids.add(tool.model_id.value)
+    return ids

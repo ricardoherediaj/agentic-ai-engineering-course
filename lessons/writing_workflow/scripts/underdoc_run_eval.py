@@ -11,7 +11,6 @@ On persistent provider 429/5xx the run stops, keeps the cache and exits non-zero
 import asyncio
 import hashlib
 import json
-import os
 import sys
 import uuid
 from pathlib import Path
@@ -128,7 +127,8 @@ def main(
     no_opik: bool,
 ) -> None:
     """Generate (cached) and judge (cached) the selected Underdoc samples."""
-    os.environ["CONFIG_FILE"] = str(config_file)  # before any brown import reads settings
+    app_config = s1.apply_config_file(config_file)
+    logger.info(f"Brown config: {config_file} | models: {sorted(s1.config_model_ids(app_config))} | judge: {judge_model}")
 
     from brown.evals.dataset import EvalDataset
     from brown.evals.metrics import build_evaluation_metrics

@@ -148,3 +148,27 @@ def test_summary_verdict_within_noise() -> None:
     noise = [_run({"a": {"m": {"c": 0.4}}}), _run({"a": {"m": {"c": 0.6}}})]
     assert summary.summarize(base, new, noise)["m"]["verdict"] == "within noise"
     assert "m" in summary.format_table(summary.summarize(base, new, noise))
+
+
+def test_apply_config_file_overrides_cached_settings(tmp_path, monkeypatch) -> None:
+    """Regression: `import brown` caches settings with the default config before `--config` is applied."""
+    from brown.config import get_settings
+    from brown.config_app import get_app_config
+
+    get_settings()  # simulate the import-time cache with the default config
+    target = Path("configs/underdoc-fallback.yaml").resolve()
+    monkeypatch.delenv("CONFIG_FILE", raising=False)
+
+    app_config = s1.apply_config_file(target)
+
+    assert Path(get_settings().CONFIG_FILE).resolve() == target
+    model_ids = s1.config_model_ids(app_config)
+    assert model_ids and all(m.startswith("opencode_go:") for m in model_ids)
+    get_settings.cache_clear()
+    get_app_config.cache_clear()
+
+
+def test_apply_config_file_raises_on_mismatch(monkeypatch) -> None:
+    monkeypatch.setattr(s1, "_resolved_config_file", lambda: Path("configs/course-gemini-flash.yaml").resolve())
+    with pytest.raises(RuntimeError, match="CONFIG_FILE"):
+        s1.apply_config_file(Path("configs/underdoc-fallback.yaml"))
