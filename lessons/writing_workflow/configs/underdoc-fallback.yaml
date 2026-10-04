@@ -17,24 +17,24 @@ num_reviews: 3
 max_reviews_per_iteration: 5
 nodes:
   generate_media_items:
-    model_id: "opencode_go:deepseek-v4-flash"
+    model_id: "opencode_go:deepseek-v4.1-flash"
     model_config: {}
     tools:
       mermaid_diagram_generator:
-        model_id: "opencode_go:deepseek-v4-flash"
+        model_id: "opencode_go:deepseek-v4.1-flash"
         config: {}
   write_article:
-    model_id: "opencode_go:deepseek-v4-flash"
+    model_id: "opencode_go:deepseek-v4.1-flash"
     model_config: {}
   review_article:
     model_id: "opencode_go:gpt-6-luna"
     model_config: {}
   edit_article:
-    model_id: "opencode_go:deepseek-v4-flash"
+    model_id: "opencode_go:deepseek-v4.1-flash"
     model_config: {}
   review_selected_text:
     model_id: "opencode_go:gpt-6-luna"
     model_config: {}
   edit_selected_text:
-    model_id: "opencode_go:deepseek-v4-flash"
+    model_id: "opencode_go:deepseek-v4.1-flash"
     model_config: {}

@@ -18,6 +18,7 @@ class SupportedModels(StrEnum):
     # OpenCode Go fallback provider (OpenAI-compatible; see get_model.py).
     OPENCODE_GO_GPT_6_LUNA = "opencode_go:gpt-6-luna"
     OPENCODE_GO_DEEPSEEK_V4_FLASH = "opencode_go:deepseek-v4-flash"
+    OPENCODE_GO_DEEPSEEK_V41_FLASH = "opencode_go:deepseek-v4.1-flash"
     FAKE_MODEL = "fake"
 
 
@@ -97,4 +98,5 @@ DEFAULT_MODEL_CONFIGS = {
     # Responses API, so no temperature is set; deepseek-v4-flash takes temperature 0.
     "opencode_go:gpt-6-luna": ModelConfig(max_retries=3),
     "opencode_go:deepseek-v4-flash": ModelConfig(temperature=0.0, max_retries=3),
+    "opencode_go:deepseek-v4.1-flash": ModelConfig(temperature=0.0, max_retries=3),
 }

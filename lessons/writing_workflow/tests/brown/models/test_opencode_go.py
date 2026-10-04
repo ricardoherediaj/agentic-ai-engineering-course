@@ -25,6 +25,7 @@ def make_settings(**overrides) -> Settings:
     [
         (SupportedModels.OPENCODE_GO_GPT_6_LUNA, "gpt-6-luna", True),
         (SupportedModels.OPENCODE_GO_DEEPSEEK_V4_FLASH, "deepseek-v4-flash", False),
+        (SupportedModels.OPENCODE_GO_DEEPSEEK_V41_FLASH, "deepseek-v4.1-flash", False),
     ],
 )
 def test_opencode_model_builds_offline(model, model_id, responses) -> None:
@@ -55,7 +56,7 @@ def test_deepseek_defaults_to_temperature_zero_and_ignores_gemini_keys() -> None
     assert llm.max_retries == 2
 
 
-@pytest.mark.parametrize("model", [SupportedModels.OPENCODE_GO_GPT_6_LUNA, SupportedModels.OPENCODE_GO_DEEPSEEK_V4_FLASH])
+@pytest.mark.parametrize("model", [SupportedModels.OPENCODE_GO_GPT_6_LUNA, SupportedModels.OPENCODE_GO_DEEPSEEK_V41_FLASH])
 def test_opencode_model_without_key_raises(model) -> None:
     settings = make_settings()
     with patch("brown.models.get_model.get_settings", return_value=settings):
@@ -88,7 +89,7 @@ def test_fallback_configs_parse(name) -> None:
     model_ids = {k: v["model_id"] for k, v in dumped["nodes"].items()}
     assert model_ids["review_article"] == "opencode_go:gpt-6-luna"
     assert model_ids["review_selected_text"] == "opencode_go:gpt-6-luna"
-    assert model_ids["write_article"] == "opencode_go:deepseek-v4-flash"
+    assert model_ids["write_article"] == "opencode_go:deepseek-v4.1-flash"
     assert all(v.startswith("opencode_go:") for v in model_ids.values())
 
 
@@ -96,7 +97,7 @@ class Pong(BaseModel):
     answer: str
 
 
-@pytest.mark.parametrize("model", [SupportedModels.OPENCODE_GO_GPT_6_LUNA, SupportedModels.OPENCODE_GO_DEEPSEEK_V4_FLASH])
+@pytest.mark.parametrize("model", [SupportedModels.OPENCODE_GO_GPT_6_LUNA, SupportedModels.OPENCODE_GO_DEEPSEEK_V41_FLASH])
 def test_opencode_live_smoke(model) -> None:
     """One tiny structured-output call per model. Skipped without OPENCODE_API_KEY in settings."""
     from brown.config import get_settings
