@@ -11,6 +11,7 @@ On persistent provider 429/5xx the run stops, keeps the cache and exits non-zero
 import asyncio
 import hashlib
 import json
+import os
 import sys
 import uuid
 from pathlib import Path
@@ -74,6 +75,11 @@ def _log_to_opik(experiment: str, dataset_name: str, rows: list[dict], metric_na
     try:
         import opik
         from opik import evaluation
+
+        from brown.observability.opik_utils import configure as configure_opik
+
+        configure_opik()  # pass OPIK_API_KEY/workspace from Brown settings (.env) to the Opik SDK
+        os.environ["OPIK_PROJECT_NAME"] = "underdoc-s1"  # keep S1 traces out of other course projects
         from opik.evaluation.metrics import base_metric, score_result
 
         by_name = {r["name"]: r for r in rows}
