@@ -1,6 +1,6 @@
 # S1: Unified voice in Brown (A2)
 
-Status: ready to start
+Status: closed (T1 to T9); T10 pending (human)
 Plan: `~/Documents/TheUnderdoc/capstone-plan.md` (rev 2, sections 3, 5, 7, 8). Engram: `course/capstone-plan` (#35).
 Branch: `feat/s1-unified-voice` (course repo) and the same branch name in `~/Documents/TheUnderdoc/harness`.
 Engram copy: `odd/s1-unified-voice/tasks`.
@@ -77,14 +77,17 @@ The Gemini free tier allows only **20 requests per day** for `gemini-3.7-flash` 
   Evidence: filled sheet plus agreement % per metric.
   Progress: the 2 validation articles were generated and judged on OpenCode Go (`outputs/s1/s1-t6-validation-r1/`; Opik experiment `s1-t6-validation-r1` in dataset `underdoc_dataset`, after the Opik fix `bb4d9eb`). The sheet `odd/labels/t6-validation-sheet.md` was pre-filled by Claude before seeing any judge output, with the frozen copy `odd/labels/t6/prefill_snapshot.md` (commit `31cecbd`). Claude-vs-judge agreement (not yet the measure of record): FollowsGT 77.8%, UserIntent 70.8%, VoiceAdherence 82.3%, overall 79.6% (117/147). Main split: the judges give 1 on `no_invented_biography` where Claude flagged unsupported first-person claims ("looked up at 3am", "I verified the prices ... in November 2025"). Caveat: the FollowsGT judge anchors the explainers post on a single "Introduction" section because its ground truth has no H2s, which leaves 21 sheet items unmatched. Waiting on Ricardo's review; `scripts/t6_agreement.py --baseline-sheet ../../odd/labels/t6/prefill_snapshot.md` computes the result.
 
-- [ ] **T7. Baseline + noise.** Add an Underdoc eval script, or extend `brown_run_eval.py` through config only, so it runs all three metrics in Opik. Run the baseline on the 10 test posts once, then the 3-post noise subset 3 times, recording the standard deviation per metric. Cache outputs so a quota hit resumes instead of restarting.
+- [x] **T7. Baseline + noise.** Done with run 2 (`s1v2-*`), cut by Ricardo for budget at 21:53 before results were inspected: 7 paired test posts, and 2 noise repeats on 3 posts per arm. No Mermaid failures and no 400 errors after `e39c491`. Opik (project `underdoc-s1`): `s1v2-baseline-r1`, `s1v2-noise-baseline-r1/r2`, uploaded after the Opik fix `a2662d4`. Baseline means: FollowsGT 0.083, UserIntent 0.387, VoiceAdherence 0.531. Noise std: 0.079, 0.062, 0.061.
+  Original scope: Add an Underdoc eval script, or extend `brown_run_eval.py` through config only, so it runs all three metrics in Opik. Run the baseline on the 10 test posts once, then the 3-post noise subset 3 times, recording the standard deviation per metric. Cache outputs so a quota hit resumes instead of restarting.
   Evidence: Opik experiment names/links; table of baseline mean and std per metric.
   Run 1 (`s1-*`, 18:29 to 21:07) is INVALID and excluded from the verdict. DeepSeek on Go returned 400 on `response_format` json_schema, so no Mermaid diagram was generated in either arm, and the fatal error in `generate_media_items` killed `s1-baseline-r1` and `s1-noise-new-r3`. The laptop also slept for about 2 hours. Fixes: `e39c491` (function calling on Go chat models) and `49bd101` (cache keys versioned by metric and generator code, so run-1 articles cannot be reused). Run 2 (`s1v2-baseline`, `s1v2-new`, `s1v2-noise-baseline`, `s1v2-noise-new`) started at 21:13 under `caffeinate`; all 4 logs confirm `deepseek-v4.1-flash` and `gpt-6-luna`.
 
-- [ ] **T8. New voice runs.** Run the same protocol with `underdoc-gemini-flash.yaml`. Stop rule: if the new voice does not beat the baseline by more than the noise after 2 iterations, change the mechanism (for example, from rules to corpus examples in context) and rerun. Hard cap: 4 iterations in total.
+- [x] **T8. New voice runs.** Done in 1 iteration (`s1v2-new-r1`, `s1v2-noise-new-r1/r2` in Opik). New-voice means: FollowsGT 0.125 (+0.042, within noise), UserIntent 0.604 (+0.217, beats noise), VoiceAdherence 0.740 (+0.209, beats noise). The stop rule was not triggered for voice or intent. FollowsGT sits at the floor in both arms (flow and structure are 0), so a mechanism change cannot move it; it is routed to metric review in T9. The slop gate and the hybrid profiles are queued as next actions, not iterations, because Ricardo capped the budget.
+  Original scope: Run the same protocol with `underdoc-gemini-flash.yaml`. Stop rule: if the new voice does not beat the baseline by more than the noise after 2 iterations, change the mechanism (for example, from rules to corpus examples in context) and rerun. Hard cap: 4 iterations in total.
   Evidence: Opik experiments per iteration; delta vs. noise table.
 
-- [ ] **T9. Verdict.** Write `odd/reports/s1-a2-verdict.md` with: the metric table (baseline, new, delta, noise), judge alignment from T6, the A2 verdict (holds / fails / inconclusive), and the next action routed by the plan's feedback ratchet. Update the Engram copy and `course/capstone-plan` status.
+- [x] **T9. Verdict.** Done: `odd/reports/s1-a2-verdict.md`. A2 holds on VoiceAdherence and UserIntent and is inconclusive on FollowsGT (floor effect), so it is not fully proven under the strict 3-metric rule. Next actions: a `check.py` slop gate in Brown's review loop, grounding against invented biography, FollowsGT metric review, hybrid profiles, a Gemini transfer check, and T10.
+  Original scope: Write `odd/reports/s1-a2-verdict.md` with: the metric table (baseline, new, delta, noise), judge alignment from T6, the A2 verdict (holds / fails / inconclusive), and the next action routed by the plan's feedback ratchet. Update the Engram copy and `course/capstone-plan` status.
   Evidence: report file; Engram updated.
 
 - [ ] **T10. Real post (human, after the goal).** Draft the next Notion idea with the new Brown voice; Ricardo edits and publishes it by hand. Record section survival and editing time as the first online baseline point.
@@ -95,4 +98,4 @@ T1 to T9 (including T3b) are checked with evidence, and `odd/reports/s1-a2-verdi
 
 ## Next step
 
-T2. Ricardo: create `lessons/writing_workflow/.env` (B1) before T7.
+S1 closed (T1 to T9). Next: T10 (a real post by Ricardo) and the first ratchet action, the `check.py` slop gate in Brown's review loop, before or alongside S0.
