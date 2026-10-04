@@ -109,7 +109,7 @@ def _log_to_opik(experiment: str, dataset_name: str, rows: list[dict], metric_na
     "--config", "config_file", type=click.Path(exists=True, dir_okay=False, path_type=Path), required=True, help="Brown CONFIG_FILE."
 )
 @click.option("--judge-model", type=str, default="opencode_go:gpt-6-luna", show_default=True)
-@click.option("--metrics", "metrics", multiple=True, default=["voice_adherence", "user_intent"], show_default=True)
+@click.option("--metrics", "metrics", multiple=True, default=["follows_gt", "user_intent", "voice_adherence"], show_default=True)
 @click.option("--experiment-name", required=True, help="Base name; runs are `<name>-r<i>`.")
 @click.option("--out-root", type=click.Path(path_type=Path), default=Path("outputs/s1"), show_default=True)
 @click.option("--retries", type=int, default=5, show_default=True, help="Backoff retries on 429/5xx per call.")
