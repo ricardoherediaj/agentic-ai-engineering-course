@@ -15,6 +15,9 @@ class SupportedModels(StrEnum):
     # Kept for backward compatibility: existing Google accounts can still use 2.5 Pro,
     # but it is not available to new accounts.
     GOOGLE_GEMINI_25_PRO = "google_genai:gemini-2.5-pro"
+    # OpenCode Go fallback provider (OpenAI-compatible; see get_model.py).
+    OPENCODE_GO_GPT_6_LUNA = "opencode_go:gpt-6-luna"
+    OPENCODE_GO_DEEPSEEK_V4_FLASH = "opencode_go:deepseek-v4-flash"
     FAKE_MODEL = "fake"
 
 
@@ -90,4 +93,8 @@ DEFAULT_MODEL_CONFIGS = {
         thinking_budget=1000,
         max_retries=3,
     ),
+    # OpenCode Go models: judge-like defaults. gpt-6-luna is a reasoning model served through the
+    # Responses API, so no temperature is set; deepseek-v4-flash takes temperature 0.
+    "opencode_go:gpt-6-luna": ModelConfig(max_retries=3),
+    "opencode_go:deepseek-v4-flash": ModelConfig(temperature=0.0, max_retries=3),
 }

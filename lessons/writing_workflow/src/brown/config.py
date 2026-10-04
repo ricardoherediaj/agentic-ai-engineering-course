@@ -45,6 +45,12 @@ class Settings(BaseSettings):
             )
         return {"api_key": self.GOOGLE_API_KEY.get_secret_value()}
 
+    # --- OpenCode Go (optional fallback provider) ---
+
+    OPENCODE_API_KEY: SecretStr | None = Field(
+        default=None, description="The API key for OpenCode Go. Only required when an `opencode_go:` model is built."
+    )
+
     # --- Opik ---
 
     OPIK_ENABLED: bool = Field(default=False, description="Whether to use Opik for monitoring and logging.")

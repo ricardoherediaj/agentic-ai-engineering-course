@@ -20,6 +20,41 @@ MODEL_TO_REQUIRED_API_KEY = {
 }
 
 
+OPENCODE_GO_PREFIX = "opencode_go:"
+OPENCODE_GO_BASE_URL = "https://opencode.ai/zen/go/v1"
+# Go's terms ask clients to identify with their own user agent (never impersonate OpenCode).
+OPENCODE_GO_USER_AGENT = "underdoc-evals/0.1"
+# Models served by the OpenAI Responses endpoint; the rest use chat completions.
+OPENCODE_GO_RESPONSES_MODELS = {SupportedModels.OPENCODE_GO_GPT_6_LUNA}
+# Gemini-only ModelConfig fields that ChatOpenAI would reject.
+_GEMINI_ONLY_KEYS = ("thinking_budget", "thinking_level", "response_modalities")
+
+
+def _get_opencode_go_model(model: SupportedModels, config: ModelConfig) -> BaseChatModel:
+    from langchain_openai import ChatOpenAI
+
+    api_key = get_settings().OPENCODE_API_KEY
+    if not api_key:
+        raise ValueError("Required environment variable `OPENCODE_API_KEY` is not set (needed for `opencode_go:` models)")
+
+    use_responses_api = model in OPENCODE_GO_RESPONSES_MODELS
+    kwargs = {k: v for k, v in config.model_dump().items() if k not in _GEMINI_ONLY_KEYS}
+    if "max_output_tokens" in kwargs:
+        kwargs["max_tokens"] = kwargs.pop("max_output_tokens")
+    if use_responses_api:
+        # Reasoning models on the Responses API may reject sampling parameters.
+        kwargs.pop("temperature", None)
+
+    return ChatOpenAI(
+        model=model.value.removeprefix(OPENCODE_GO_PREFIX),
+        base_url=OPENCODE_GO_BASE_URL,
+        api_key=api_key,
+        default_headers={"User-Agent": OPENCODE_GO_USER_AGENT},
+        use_responses_api=use_responses_api,
+        **kwargs,
+    )
+
+
 def get_model(model: SupportedModels, config: ModelConfig | None = None) -> BaseChatModel:
     if model == SupportedModels.FAKE_MODEL:
         if config and config.mocked_response is not None:
@@ -32,6 +67,9 @@ def get_model(model: SupportedModels, config: ModelConfig | None = None) -> Base
             return FakeModel(responses=[])
 
     config = config or DEFAULT_MODEL_CONFIGS.get(model) or ModelConfig()
+    if model.value.startswith(OPENCODE_GO_PREFIX):
+        return _get_opencode_go_model(model, config)
+
     model_kwargs = {
         "model": model.value,
         **config.model_dump(),

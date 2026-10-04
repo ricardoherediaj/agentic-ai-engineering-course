@@ -63,6 +63,13 @@ from brown.observability.evaluation import evaluate
     is_flag=True,
     help="Enable debug mode.",
 )
+@click.option(
+    "--judge-model",
+    type=click.Choice([m.value for m in SupportedModels if m != SupportedModels.FAKE_MODEL]),
+    default=SupportedModels.GOOGLE_GEMINI_37_FLASH.value,
+    show_default=True,
+    help="Model used as the LLM judge. Use an `opencode_go:` model as a fallback (needs OPENCODE_API_KEY).",
+)
 def main(
     dataset_name: str,
     metrics: List[str],
@@ -72,6 +79,7 @@ def main(
     nb_samples: int | None,
     read_from_cache: bool,
     debug: bool,
+    judge_model: str,
 ) -> None:
     """Run evaluation over an Opik dataset with the Brown agent.
 
@@ -87,6 +95,7 @@ def main(
         nb_samples: Number of samples to evaluate. If None, evaluates the full dataset.
         read_from_cache: If True, read generated outputs from cache instead of generating.
         debug: If True, enables additional debugging information in the workflow.
+        judge_model: Value of the SupportedModels entry used as the LLM judge.
         metrics: Names of scoring metrics to use. Supported: "follows_gt", "user_intent".
 
     Raises:
@@ -108,8 +117,12 @@ def main(
         debug=debug,
     )
 
-    model = SupportedModels.GOOGLE_GEMINI_37_FLASH
-    model_config = ModelConfig(temperature=0.0, thinking_level="high", include_thoughts=False, max_retries=3)
+    model = SupportedModels(judge_model)
+    if model.value.startswith("google_genai:"):
+        model_config = ModelConfig(temperature=0.0, thinking_level="high", include_thoughts=False, max_retries=3)
+    else:
+        # Gemini-only options (thinking_level) do not apply to other providers.
+        model_config = ModelConfig(temperature=0.0, max_retries=3)
     evaluation_metrics = build_evaluation_metrics(metrics, model, model_config)
 
     if split == "val":
