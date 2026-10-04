@@ -1,0 +1,212 @@
+[
+    {
+        "name": "Underdoc: 3 Data-Driven Strategies for Football Data Enthusiasts, Analysts & Coaches",
+        "directory": "data/2025-06-08-3-data-driven-strategies-for-football",
+        "bucket": "field-notes",
+        "split": "extended",
+        "noise_subset": false,
+        "bucket_reason": "Event recap from a football analytics workshop, opinion-style takeaways."
+    },
+    {
+        "name": "Underdoc: 5 Actionable Tips and Resources to Start Analyzing Football Data",
+        "directory": "data/2025-06-11-5-actionable-tips-and-resources-to",
+        "bucket": "bridge",
+        "split": "extended",
+        "noise_subset": false,
+        "bucket_reason": "Personal lessons and curated resources for getting into football analytics."
+    },
+    {
+        "name": "Underdoc: The Art of Football Data Scouting: Building Teams With Data-Driven Decisions",
+        "directory": "data/2025-06-27-the-art-of-football-data-scouting",
+        "bucket": "explainers",
+        "split": "extended",
+        "noise_subset": false,
+        "bucket_reason": "Explains a data-driven scouting method through a club case study."
+    },
+    {
+        "name": "Underdoc: The Art of Football Data Scouting (II): 3 Steps to Find Potential Signings",
+        "directory": "data/2025-07-06-the-art-of-football-data-scouting-d2a",
+        "bucket": "explainers",
+        "split": "extended",
+        "noise_subset": false,
+        "bucket_reason": "Continues the scouting method: profile identification, search and shortlist."
+    },
+    {
+        "name": "Underdoc: How to Scrape Transfermarkt with Python: Data-Driven Player Recruitment using England’s Championship, League Two, and League One data.",
+        "directory": "data/2025-07-09-how-to-scrape-transfermarkt-with",
+        "bucket": "builds",
+        "split": "extended",
+        "noise_subset": false,
+        "bucket_reason": "Walks through the Python scraper he built, its design and storage."
+    },
+    {
+        "name": "Underdoc: How to Use FBRef for Football Scouting with Python?",
+        "directory": "data/2025-07-20-how-to-use-fbref-for-football-scouting",
+        "bucket": "builds",
+        "split": "extended",
+        "noise_subset": false,
+        "bucket_reason": "Shows his Python scraping and cleaning code for a free stats site."
+    },
+    {
+        "name": "Underdoc: Building Your Own Football Analytics Dashboards With Free Data",
+        "directory": "data/2025-07-27-building-your-own-football-analytics",
+        "bucket": "builds",
+        "split": "extended",
+        "noise_subset": false,
+        "bucket_reason": "Describes a six-plot match dashboard he built in Python and its repo."
+    },
+    {
+        "name": "Underdoc: Using Agentic IDEs for Football Analytics",
+        "directory": "data/2025-08-12-using-agentic-ides-for-football-analytics",
+        "bucket": "explainers",
+        "split": "validation",
+        "noise_subset": false,
+        "bucket_reason": "Explains what agentic IDEs are and compares two of them with a reusable setup framework."
+    },
+    {
+        "name": "Underdoc: The Data Learning Diary: Tracking Your Weekly Learning Progress",
+        "directory": "data/2025-08-23-the-data-learning-diary-tracking",
+        "bucket": "bridge",
+        "split": "extended",
+        "noise_subset": false,
+        "bucket_reason": "Personal learning and note-taking habit; no code."
+    },
+    {
+        "name": "Underdoc: uv: The Tool That Helps You Manage Your Python Project Dependencies Smoothly",
+        "directory": "data/2025-08-31-uv-the-tool-that-helps-you-manage",
+        "bucket": "explainers",
+        "split": "extended",
+        "noise_subset": false,
+        "bucket_reason": "Explains what uv is and why to use it, with a setup example on his tutorial repo."
+    },
+    {
+        "name": "Underdoc: Understanding Model Context Protocol (MCP): Connecting LLMs to Real Data",
+        "directory": "data/2025-09-29-understanding-model-context-protocol",
+        "bucket": "explainers",
+        "split": "test",
+        "noise_subset": false,
+        "bucket_reason": "Explains what MCP is, its architecture and primitives, using a collaborative server as the example."
+    },
+    {
+        "name": "Underdoc: Building a RAG System That Generates Football Post-Match Tactical Reports Automatically",
+        "directory": "data/2025-12-26-building-a-rag-system-that-generates",
+        "bucket": "builds",
+        "split": "validation",
+        "noise_subset": false,
+        "bucket_reason": "Announces and explains the football RAG system he built, with architecture, demo and repo."
+    },
+    {
+        "name": "Underdoc: A Thank You, Two Ideas From a Book That Changed My 2025 and Timothée Chalamet's Pursuit of Greatness",
+        "directory": "data/2025-12-31-a-thank-you-two-ideas-from-a-book",
+        "is_few_shot_example": true,
+        "bucket": "bridge",
+        "split": "few_shot",
+        "noise_subset": false,
+        "bucket_reason": "Year-end thank-you plus a career-mindset reflection from a book; no code."
+    },
+    {
+        "name": "Underdoc: RAG is a Data Engineering Heavy Problem: Building a Football ETL for AI",
+        "directory": "data/2026-01-12-rag-is-a-data-engineering-heavy-problem",
+        "is_few_shot_example": true,
+        "bucket": "builds",
+        "split": "few_shot",
+        "noise_subset": false,
+        "bucket_reason": "Walks through the ETL code and contracts Ricardo built for his football RAG system."
+    },
+    {
+        "name": "Underdoc: Farewell FBref Advanced Stats: When One Door Closes Another Opens",
+        "directory": "data/2026-01-22-farewell-fbref-advanced-stats-when",
+        "bucket": "field-notes",
+        "split": "test",
+        "noise_subset": false,
+        "bucket_reason": "Short reaction to a news event in the football data world, with opinion and advice."
+    },
+    {
+        "name": "Underdoc: From Vibes to Metrics: How I Evaluated A Football RAG System",
+        "directory": "data/2026-01-30-from-vibes-to-metrics-how-i-evaluated",
+        "bucket": "builds",
+        "split": "extended",
+        "noise_subset": false,
+        "bucket_reason": "Details the evaluation harness and prompt iterations he built for his RAG system."
+    },
+    {
+        "name": "Underdoc: Shipping a RAG System App to HF Spaces with Gradio",
+        "directory": "data/2026-02-10-shipping-a-rag-system-app-to-hf-spaces",
+        "bucket": "builds",
+        "split": "extended",
+        "noise_subset": false,
+        "bucket_reason": "Explains the UI and deployment he built and shipped for his RAG system."
+    },
+    {
+        "name": "Underdoc: Embrace Your Weirdness",
+        "directory": "data/2026-02-21-embrace-your-weirdness",
+        "bucket": "bridge",
+        "split": "test",
+        "noise_subset": true,
+        "bucket_reason": "Personal essay on career identity and unusual skill combinations; no code."
+    },
+    {
+        "name": "Underdoc: Wordalisation & Context Engineering: What Finally Made My RAG System Sound Like Football",
+        "directory": "data/2026-03-03-wordalisation-and-context-engineering",
+        "bucket": "builds",
+        "split": "test",
+        "noise_subset": true,
+        "bucket_reason": "Describes concrete prompt and context changes he made in his own RAG codebase."
+    },
+    {
+        "name": "Underdoc: How a Football Framework for Measuring Performance Works For Other Industries",
+        "directory": "data/2026-03-09-how-a-football-framework-for-measuring",
+        "bucket": "explainers",
+        "split": "test",
+        "noise_subset": true,
+        "bucket_reason": "Explains a performance-measurement framework and shows how it transfers to other domains."
+    },
+    {
+        "name": "Underdoc: Got interviewed by Ryan Day in his Tip Sheet issue #65 and some extra thoughts",
+        "directory": "data/2026-05-05-got-interviewed-by-ryan-day-in-his",
+        "bucket": "bridge",
+        "split": "test",
+        "noise_subset": false,
+        "bucket_reason": "Expands on his answers in a newsletter interview about learning and side projects."
+    },
+    {
+        "name": "Underdoc: How To Use Tool Calling To Build a Football Agent",
+        "directory": "data/2026-05-26-how-to-use-tool-calling-to-build",
+        "bucket": "builds",
+        "split": "test",
+        "noise_subset": false,
+        "bucket_reason": "Retrospective on an agent his team built in a course, with stack, iterations and results."
+    },
+    {
+        "name": "Underdoc: Venezuela's Earthquake Tragedy: What's Happening and How to Help from Abroad",
+        "directory": "data/2026-06-27-venezuelas-earthquake-tragedy-whats",
+        "bucket": "field-notes",
+        "split": "test",
+        "noise_subset": false,
+        "bucket_reason": "Time-sensitive news and call to action about a disaster; not technical."
+    },
+    {
+        "name": "Underdoc: I Automated My Personal Finance Tracking With a Claude Skill and Two MCP Servers",
+        "directory": "data/2026-07-12-i-automated-my-personal-finance-tracking",
+        "bucket": "builds",
+        "split": "extended",
+        "noise_subset": false,
+        "bucket_reason": "Describes a Claude skill and two MCP servers he built to automate expense syncing."
+    },
+    {
+        "name": "Underdoc: A Claude Skill to Build Your Own Football Analytics Post Match Reports Automatically",
+        "directory": "data/2026-08-08-a-claude-skill-to-build-your-own",
+        "bucket": "builds",
+        "split": "test",
+        "noise_subset": false,
+        "bucket_reason": "Reports refactoring a repo into a package and an installable agent skill, with code layout."
+    },
+    {
+        "name": "Underdoc: A Greek God and Two Cetaceans to Build With AI",
+        "directory": "data/2026-08-17-a-greek-god-and-two-cetaceans-to",
+        "bucket": "builds",
+        "split": "test",
+        "noise_subset": false,
+        "bucket_reason": "Hands-on setup and cost report of an agentic coding stack used to build a real skill."
+    }
+]
