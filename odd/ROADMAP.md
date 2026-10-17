@@ -17,4 +17,6 @@ Las dos reglas que ordenan todo:
 - Cada fase termina sirviendo **un post real** (la cadencia de 15 días no se frena por el build).
 - Cada fase prueba **el supuesto más riesgoso que queda** (la voz fue primero; el monorepo, después).
 
+**No es solo builds.** El sistema cubre los cuatro tipos que escribís: **builds, explainers, bridge y field-notes** (taxonomía confirmada en el plan). Los builds son el **caso más difícil y el test case**, porque necesitan que Nova lea el repo (fase 4); los explainers van a Nova sin esa herramienta, con URLs y docs como fuente; bridge y field-notes salen con lo mismo que ya funciona hoy. El resto del flujo es idéntico para los cuatro: misma voz, mismo Brown, mismo gate, mismo borrador a Substack.
+
 Contexto y alcance completo: `~/Documents/TheUnderdoc/capstone-plan.md` (rev 2). Memoria: Engram `course/capstone-plan` (#35) y `capstone/s1-1-hardening-design` (#45).
