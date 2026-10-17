@@ -1,6 +1,7 @@
 # S1.1: Pre-S0 hardening
 
 Status: **approved 2026-10-17; executing.** Design: `capstone/s1-1-hardening-design` (#45, Engram). Evidence: `capstone/s1-1-pre-s0-findings` (#44).
+Roadmap (nombre primero, código entre paréntesis): `odd/ROADMAP.md`.
 Plan: `~/Documents/TheUnderdoc/capstone-plan.md` (rev 2, sections 4, 5, 7, 8). Engram: `course/capstone-plan` (#35).
 Branch: `feat/s1-unified-voice` (course repo) and `~/Documents/TheUnderdoc/harness`.
 Predecessor: `odd/tasks/s1-unified-voice.md` (S1 closed T1 to T9; T10 open there).
