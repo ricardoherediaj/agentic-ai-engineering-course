@@ -36,6 +36,19 @@ class Memory(BaseModel):
     checkpointer: Literal["in_memory", "sqlite"]
 
 
+class SlopGateConfig(BaseModel):
+    """Deterministic slop gate (harness `check.py` G-05) fed into the review loop. Off by default."""
+
+    enabled: bool = Field(
+        default=False,
+        description="Run the harness slop gate on every draft and add its hits to the review loop as reviews.",
+    )
+    harness_path: str | None = Field(
+        default=None,
+        description="Path to the Underdoc harness (holds `checks/check.py`). Falls back to the env var UNDERDOC_HARNESS_PATH.",
+    )
+
+
 class ToolConfig(BaseModel):
     name: str
     model_id: SupportedModels
@@ -51,6 +64,7 @@ class NodeConfig(BaseModel):
 class AppConfig(BaseModel):
     context: Context
     memory: Memory
+    slop_gate: SlopGateConfig = Field(default_factory=SlopGateConfig)
 
     num_reviews: Annotated[int, Ge(1), Field(description="The number of reviews to perform while generating the article the first time.")]
     max_reviews_per_iteration: Annotated[

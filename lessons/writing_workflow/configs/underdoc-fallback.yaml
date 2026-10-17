@@ -15,6 +15,9 @@ memory:
   checkpointer: "in_memory"
 num_reviews: 3
 max_reviews_per_iteration: 5
+slop_gate:
+  # Harness G-05 hits are fed into the review loop as `mechanics` reviews. Path: UNDERDOC_HARNESS_PATH.
+  enabled: true
 nodes:
   generate_media_items:
     model_id: "opencode_go:deepseek-v4.1-flash"

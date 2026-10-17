@@ -9,7 +9,7 @@ from langgraph.func import entrypoint, task
 from langgraph.types import RetryPolicy
 
 from brown.base import Loader
-from brown.builders import build_article_renderer, build_loaders, build_model
+from brown.builders import build_article_renderer, build_loaders, build_model, build_slop_gate
 from brown.config_app import get_app_config
 from brown.entities.articles import Article, ArticleExamples
 from brown.entities.guidelines import ArticleGuideline
@@ -17,6 +17,7 @@ from brown.entities.media_items import MediaItem, MediaItems
 from brown.entities.profiles import ArticleProfiles
 from brown.entities.research import Research
 from brown.entities.reviews import ArticleReviews
+from brown.gates import append_gate_reviews
 from brown.nodes.article_reviewer import ArticleReviewer
 from brown.nodes.article_writer import ArticleWriter
 from brown.nodes.media_generator import MediaGeneratorOrchestrator
@@ -196,7 +197,7 @@ async def generate_reviews(article: Article, article_guideline: ArticleGuideline
     )
     reviews = await article_reviewer.ainvoke()
 
-    return cast(ArticleReviews, reviews)
+    return append_gate_reviews(cast(ArticleReviews, reviews), build_slop_gate(app_config))
 
 
 @task(retry_policy=retry_policy)

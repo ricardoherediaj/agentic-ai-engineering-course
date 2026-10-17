@@ -1,3 +1,5 @@
+import os
+from pathlib import Path
 from typing import Literal, TypedDict
 
 from langchain_core.runnables import Runnable
@@ -5,6 +7,7 @@ from langchain_core.runnables import Runnable
 from brown.base import Loader, Renderer
 from brown.config_app import AppConfig
 from brown.entities.exceptions import InvalidConfigurationException
+from brown.gates import SlopGate, load_check_module
 from brown.loaders import (
     MarkdownArticleExampleLoader,
     MarkdownArticleGuidelineLoader,
@@ -87,6 +90,19 @@ def build_loaders(app_config: AppConfig) -> Loaders:
 #####################
 ##### Renderers #####
 #####################
+
+
+def build_slop_gate(app_config: AppConfig) -> SlopGate | None:
+    """The harness slop gate when `slop_gate.enabled`; `None` keeps the review loop as it was."""
+    config = app_config.slop_gate
+    if not config.enabled:
+        return None
+    harness_path = config.harness_path or os.environ.get("UNDERDOC_HARNESS_PATH")
+    if not harness_path:
+        raise InvalidConfigurationException(
+            "slop_gate.enabled is true but no harness path: set `slop_gate.harness_path` in the config or UNDERDOC_HARNESS_PATH"
+        )
+    return SlopGate(load_check_module(Path(harness_path)))
 
 
 def build_article_renderer(app_config: AppConfig) -> Renderer:
