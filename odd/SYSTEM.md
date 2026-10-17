@@ -2,6 +2,8 @@
 
 Para retomar sin repetir el curso. Nombre primero, código entre paréntesis.
 
+Mapa visual: `odd/system-map.svg` (sólido = existe hoy, punteado = falta construir).
+
 ## 1. Las cinco piezas
 
 | Pieza | Qué es técnicamente | Dónde vive | Cómo se ejecuta |

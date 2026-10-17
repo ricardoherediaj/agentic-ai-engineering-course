@@ -1,0 +1,101 @@
+<svg viewBox="0 0 980 630" width="100%" role="img" aria-label="Mapa del sistema Underdoc: voz, producción y entrega">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+    </marker>
+    <marker id="arrow-pending" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent)"/>
+    </marker>
+  </defs>
+
+  <!-- ============ 1 · voz (harness) ============ -->
+  <rect x="20" y="20" width="940" height="140" rx="12" fill="none" stroke="var(--border)"/>
+  <text x="36" y="46" font-size="15" font-weight="600" fill="currentColor">1 · Tu voz — harness (sin LLM, sin costo)</text>
+
+  <rect x="36" y="64" width="250" height="76" rx="8" fill="var(--surface)" stroke="var(--border)"/>
+  <text x="161" y="94" font-size="14" text-anchor="middle" fill="currentColor">Reglas de voz</text>
+  <text x="161" y="116" font-size="12" text-anchor="middle" fill="var(--muted)">skill/references/*.md</text>
+
+  <rect x="306" y="64" width="250" height="76" rx="8" fill="var(--surface)" stroke="var(--border)"/>
+  <text x="431" y="94" font-size="14" text-anchor="middle" fill="currentColor">Corpus publicado</text>
+  <text x="431" y="116" font-size="12" text-anchor="middle" fill="var(--muted)">26 posts en corpus/</text>
+
+  <rect x="576" y="64" width="368" height="76" rx="8" fill="var(--surface)" stroke="var(--border)"/>
+  <text x="760" y="94" font-size="14" text-anchor="middle" fill="currentColor">Gates deterministas · checks/check.py</text>
+  <text x="760" y="116" font-size="12" text-anchor="middle" fill="var(--muted)">G-01…G-08 · niveles fail/warn · 33 tests</text>
+
+  <!-- ============ 2 · producción ============ -->
+  <rect x="20" y="180" width="940" height="250" rx="12" fill="none" stroke="var(--border)"/>
+  <text x="36" y="206" font-size="15" font-weight="600" fill="currentColor">2 · Producción — los agentes (LLM, con costo)</text>
+
+  <rect x="36" y="228" width="170" height="70" rx="8" fill="var(--surface)" stroke="var(--border)"/>
+  <text x="121" y="258" font-size="14" text-anchor="middle" fill="currentColor">Tu brief</text>
+  <text x="121" y="278" font-size="12" text-anchor="middle" fill="var(--muted)">article_guideline.md</text>
+
+  <rect x="236" y="228" width="170" height="70" rx="8" fill="var(--surface)" stroke="var(--border)"/>
+  <text x="321" y="258" font-size="14" text-anchor="middle" fill="currentColor">Nova (MCP)</text>
+  <text x="321" y="278" font-size="12" text-anchor="middle" fill="var(--muted)">13 tools · S2: lee repos</text>
+
+  <rect x="500" y="228" width="240" height="70" rx="8" fill="var(--surface)" stroke="var(--border)"/>
+  <text x="620" y="258" font-size="14" text-anchor="middle" fill="currentColor">Brown (LangGraph)</text>
+  <text x="620" y="278" font-size="12" text-anchor="middle" fill="var(--muted)">escribir → revisar → editar ×3</text>
+
+  <rect x="780" y="228" width="160" height="70" rx="8" fill="var(--surface)" stroke="var(--border)"/>
+  <text x="860" y="258" font-size="14" text-anchor="middle" fill="currentColor">article.md</text>
+  <text x="860" y="278" font-size="12" text-anchor="middle" fill="var(--muted)">borrador final</text>
+
+  <rect x="306" y="340" width="250" height="66" rx="8" fill="var(--surface)" stroke="var(--border)"/>
+  <text x="431" y="366" font-size="14" text-anchor="middle" fill="currentColor">Perfiles generados (6)</text>
+  <text x="431" y="386" font-size="12" text-anchor="middle" fill="var(--muted)">inputs/profiles/underdoc</text>
+
+  <rect x="780" y="340" width="160" height="66" rx="8" fill="var(--surface)" stroke="var(--border)"/>
+  <text x="860" y="366" font-size="14" text-anchor="middle" fill="currentColor">Evals + Opik</text>
+  <text x="860" y="386" font-size="12" text-anchor="middle" fill="var(--muted)">scores.json · corridas</text>
+
+  <!-- ============ 3 · entrega ============ -->
+  <rect x="20" y="450" width="940" height="160" rx="12" fill="none" stroke="var(--border)"/>
+  <text x="36" y="476" font-size="15" font-weight="600" fill="currentColor">3 · Entrega — tu MCP y la publicación</text>
+
+  <rect x="36" y="496" width="250" height="80" rx="8" fill="var(--surface)" stroke="var(--accent)" stroke-dasharray="6 4"/>
+  <text x="161" y="526" font-size="14" text-anchor="middle" fill="currentColor">Tu MCP (Underdoc) — S3</text>
+  <text x="161" y="548" font-size="12" text-anchor="middle" fill="var(--muted)">voz + prompt HITL + 7 tools Substack</text>
+
+  <rect x="336" y="496" width="200" height="80" rx="8" fill="var(--surface)" stroke="var(--accent)" stroke-dasharray="6 4"/>
+  <text x="436" y="526" font-size="14" text-anchor="middle" fill="currentColor">Borrador en Substack</text>
+  <text x="436" y="548" font-size="12" text-anchor="middle" fill="var(--muted)">estructura + imágenes</text>
+
+  <rect x="586" y="496" width="170" height="80" rx="8" fill="var(--surface)" stroke="var(--border)"/>
+  <text x="671" y="526" font-size="14" text-anchor="middle" fill="currentColor">Vos: editás y publicás</text>
+  <text x="671" y="548" font-size="12" text-anchor="middle" fill="var(--muted)">siempre a mano</text>
+
+  <rect x="806" y="496" width="130" height="80" rx="8" fill="var(--surface)" stroke="var(--border)"/>
+  <text x="871" y="526" font-size="14" text-anchor="middle" fill="currentColor">Métricas online</text>
+  <text x="871" y="548" font-size="12" text-anchor="middle" fill="var(--muted)">secciones · tiempo</text>
+
+  <text x="36" y="598" font-size="12" fill="var(--muted)">Sólido: existe hoy · Punteado (acento): falta construir — S2 en Nova, S3 tu MCP, S4 deploy</text>
+
+  <!-- ============ flechas ============ -->
+  <!-- brief → nova -->
+  <path d="M 206 263 H 230" fill="none" stroke="currentColor" marker-end="url(#arrow)"/>
+  <!-- nova → brown (research.md) -->
+  <path d="M 406 263 H 494" fill="none" stroke="currentColor" marker-end="url(#arrow)"/>
+  <text x="450" y="256" font-size="12" text-anchor="middle" fill="var(--muted)">research.md</text>
+  <!-- brown → article -->
+  <path d="M 740 263 H 774" fill="none" stroke="currentColor" marker-end="url(#arrow)"/>
+  <!-- article → evals -->
+  <path d="M 860 298 V 334" fill="none" stroke="currentColor" marker-end="url(#arrow)"/>
+  <!-- harness: gates → brown (por ruta, temporal) -->
+  <path d="M 620 140 V 222" fill="none" stroke="var(--accent)" stroke-dasharray="6 4" marker-end="url(#arrow-pending)"/>
+  <text x="628" y="205" font-size="12" fill="var(--muted)">check.py por ruta (S0: voice/)</text>
+  <!-- harness: reglas/corpus → perfiles (sync) -->
+  <path d="M 380 140 V 334" fill="none" stroke="var(--accent)" stroke-dasharray="6 4" marker-end="url(#arrow-pending)"/>
+  <text x="386" y="320" font-size="12" fill="var(--muted)">sync (copia)</text>
+  <!-- article → tu MCP -->
+  <path d="M 940 263 H 952 V 440 H 161 V 490" fill="none" stroke="var(--accent)" stroke-dasharray="6 4" marker-end="url(#arrow-pending)"/>
+  <!-- mcp → substack -->
+  <path d="M 286 536 H 330" fill="none" stroke="var(--accent)" stroke-dasharray="6 4" marker-end="url(#arrow-pending)"/>
+  <!-- substack → vos -->
+  <path d="M 536 536 H 580" fill="none" stroke="var(--accent)" stroke-dasharray="6 4" marker-end="url(#arrow-pending)"/>
+  <!-- vos → métricas -->
+  <path d="M 756 536 H 800" fill="none" stroke="currentColor" marker-end="url(#arrow)"/>
+</svg>
