@@ -182,82 +182,82 @@ Anchor choice: FollowsGT sections are the ground truth's eight H2s ("Long time n
 #### "Long time no see"
 
 - [x] follows_gt.content: generated intro plus "What was annoying me" cover the seasonal check-in, why he is back, the pain of gathering free match data, and the ideal natural-language interaction.
-- [ ] follows_gt.flow: ground truth goes greeting, return note, problem, ideal question in one section; generated adds an invented anecdote ("started working ... at 9pm and looked up at 3am") and splits the problem into its own H2.
-- [ ] follows_gt.structure: ground truth sets the problem and the ideal question as bold callouts; generated has no bold and adds a separate H2, "What was annoying me".
+- [x] follows_gt.flow: ground truth goes greeting, return note, problem, ideal question in one section; generated adds an invented anecdote ("started working ... at 9pm and looked up at 3am") and splits the problem into its own H2.
+- [x] follows_gt.structure: ground truth sets the problem and the ideal question as bold callouts; generated has no bold and adds a separate H2, "What was annoying me".
 
 #### "What I Built"
 
 - [x] follows_gt.content: both present the live demo on Hugging Face Spaces, the RAG definition, Eredivisie data from WhoScored and Fotmob, 108 matches, ~1,355 events, three providers, $0.50, and dual-mode.
-- [ ] follows_gt.flow: ground truth ends with a bulleted feature list and the dashboard article link; generated adds a validation-limitation paragraph ("It does not verify yet that a number belongs to the match") and screenshot placeholders.
-- [ ] follows_gt.structure: ground truth uses a bold-label bullet list ("**108 Eredivisie matches indexed**"); generated uses prose paragraphs and "[SCREENSHOT: ...]" placeholders.
+- [x] follows_gt.flow: ground truth ends with a bulleted feature list and the dashboard article link; generated adds a validation-limitation paragraph ("It does not verify yet that a number belongs to the match") and screenshot placeholders.
+- [x] follows_gt.structure: ground truth uses a bold-label bullet list ("**108 Eredivisie matches indexed**"); generated uses prose paragraphs and "[SCREENSHOT: ...]" placeholders.
 
 #### "Why This Matters"
 
-- [ ] follows_gt.content: no generated section covers who benefits (coaches, scouts, analysts, fans, developers) or the value of one place for data; section missing.
-- [ ] follows_gt.flow: section missing from the generated article.
-- [ ] follows_gt.structure: section missing from the generated article.
+- [x] follows_gt.content: no generated section covers who benefits (coaches, scouts, analysts, fans, developers) or the value of one place for data; section missing.
+- [x] follows_gt.flow: section missing from the generated article.
+- [x] follows_gt.structure: section missing from the generated article. (dont understand why)
 
 #### "How It Works"
 
 - [x] follows_gt.content: both give the flow (route, retrieve, generate, validate, deliver) and the same decisions (2-chunk design, 38 pre-calculated features, metadata filtering, bypassing the LLM for plots, Pydantic golden dataset).
-- [ ] follows_gt.flow: generated adds scrape and compute-features steps (six steps vs five) and adds trade-off commentary ("a question that never names a team gives the filter nothing to grab").
-- [ ] follows_gt.structure: ground truth has an ASCII diagram, bold numbered steps and a bold-label bullet list; generated uses a plain numbered list, a mermaid diagram and an H3, "### The decisions behind it".
+- [x] follows_gt.flow: generated adds scrape and compute-features steps (six steps vs five) and adds trade-off commentary ("a question that never names a team gives the filter nothing to grab").
+- [x] follows_gt.structure: ground truth has an ASCII diagram, bold numbered steps and a bold-label bullet list; generated uses a plain numbered list, a mermaid diagram and an H3, "### The decisions behind it".
 
 #### "The Results"
 
 - [x] follows_gt.content: both report retrieval accuracy 100% vs 70%, faithfulness 99.4%, tactical insight 95.0%, about $0.0001 per query and the wrong-name limitation.
-- [ ] follows_gt.flow: generated adds a long judge-scoring methodology ("The match score is the share of that match's criteria the judge marked as met") and a chart; ground truth is a short metric-by-metric list.
-- [ ] follows_gt.structure: ground truth uses bold metric lines ("**Retrieval Accuracy: 100%**") with one-line explanations; generated uses prose and an xychart block.
+- [x] follows_gt.flow: generated adds a long judge-scoring methodology ("The match score is the share of that match's criteria the judge marked as met") and a chart; ground truth is a short metric-by-metric list.
+- [x] follows_gt.structure: ground truth uses bold metric lines ("**Retrieval Accuracy: 100%**") with one-line explanations; generated uses prose and an xychart block.
 
 #### "What's Next: The Series Roadmap"
 
 - [x] follows_gt.content: both list the same five upcoming posts (ETL, prompt engineering, evaluation-driven development, deployment, production scaling).
-- [ ] follows_gt.flow: ground truth elaborates each post (what RAG is, V1.0 to V3.5 iterations, three-metric framework, CI/CD); generated gives one short line each and drops most of that detail.
-- [ ] follows_gt.structure: ground truth uses bold post titles followed by descriptions; generated uses plain one-line bullets with no bold.
+- [x] follows_gt.flow: ground truth elaborates each post (what RAG is, V1.0 to V3.5 iterations, three-metric framework, CI/CD); generated gives one short line each and drops most of that detail.
+- [x] follows_gt.structure: ground truth uses bold post titles followed by descriptions; generated uses plain one-line bullets with no bold.
 
 #### "Try It Yourself"
 
 - [x] follows_gt.content: both invite readers to try the demo with their own API key and to clone the open-source repo.
-- [ ] follows_gt.flow: ground truth includes six example queries and "Clone it. Run it locally."; generated has no example queries and adds "open an issue on GitHub".
-- [ ] follows_gt.structure: ground truth has bold links and bold-labelled quote lists; generated uses plain "The demo:" and "The repo:" lines.
+- [x] follows_gt.flow: ground truth includes six example queries and "Clone it. Run it locally."; generated has no example queries and adds "open an issue on GitHub".
+- [x] follows_gt.structure: ground truth has bold links and bold-labelled quote lists; generated uses plain "The demo:" and "The repo:" lines.
 
 #### "Bottom Line"
 
-- [ ] follows_gt.content: no generated section closes with the project goal and the "idea to working system" reflection; section missing.
-- [ ] follows_gt.flow: section missing from the generated article.
-- [ ] follows_gt.structure: section missing from the generated article.
+- [x] follows_gt.content: no generated section closes with the project goal and the "idea to working system" reflection; section missing.
+- [x] follows_gt.flow: section missing from the generated article.
+- [x] follows_gt.structure: section missing from the generated article.
 
 ### UserIntent
 
 #### "Introduction"
 
 - [x] user_intent.guideline_adherence: opens with the new-season check-in and gives reasons for writing again, as intent 1 asks.
-- [ ] user_intent.research_anchoring: "One Saturday I started working on the football RAG system at 9pm and looked up at 3am" is not in the research.
+- [x] user_intent.research_anchoring: "One Saturday I started working on the football RAG system at 9pm and looked up at 3am" is not in the research.
 
 #### "What was annoying me"
 
 - [x] user_intent.guideline_adherence: states the pain across WhoScored and Fotmob and the ideal "type a question, get the numbers and the chart" interaction.
-- [ ] user_intent.research_anchoring: "remind yourself what PPDA (passes allowed per defensive action) actually measures" and the Ajax vs Heracles example question are not in the research.
+- [x] user_intent.research_anchoring: "remind yourself what PPDA (passes allowed per defensive action) actually measures" and the Ajax vs Heracles example question are not in the research.
 
 #### "What the app does"
 
-- [ ] user_intent.guideline_adherence: demo, modes, 108 matches and $0.50 are there, but it adds a validation limitation ("It only checks that the number appears somewhere in the dataset") that belongs to the failure-modes section.
-- [ ] user_intent.research_anchoring: "so a real number attached to the wrong match can still get through" goes beyond the research, which only says occasional wrong team names or statistics.
+- [x] user_intent.guideline_adherence: demo, modes, 108 matches and $0.50 are there, but it adds a validation limitation ("It only checks that the number appears somewhere in the dataset") that belongs to the failure-modes section.
+- [x] user_intent.research_anchoring: "so a real number attached to the wrong match can still get through" goes beyond the research, which only says occasional wrong team names or statistics.
 
 #### "How it works at a high level"
 
-- [ ] user_intent.guideline_adherence: intent 4 says without deep detail; generated adds per-decision trade-off paragraphs and a very large mermaid diagram that includes evaluation and roadmap nodes.
-- [ ] user_intent.research_anchoring: "a question that never names a team gives the filter nothing to grab, and I do not have a clean answer for those queries yet" is not in the research.
+- [x] user_intent.guideline_adherence: intent 4 says without deep detail; generated adds per-decision trade-off paragraphs and a very large mermaid diagram that includes evaluation and roadmap nodes.
+- [x] user_intent.research_anchoring: "a question that never names a team gives the filter nothing to grab, and I do not have a clean answer for those queries yet" is not in the research.
 
 #### "First evaluation results + Where it still fails"
 
-- [ ] user_intent.guideline_adherence: all the figures and failure modes are present, but a long scoring-method explanation ("the average of the 10 match scores, and every match carries the same weight") and "I am not publishing the per-criterion breakdown yet" are extra.
-- [ ] user_intent.research_anchoring: "Each match has one rubric with a set of criteria", "I wrote the questions and the rubrics" and "Index a match under the wrong team name and retrieval will confidently hand it back" are not in the research.
+- [x] user_intent.guideline_adherence: all the figures and failure modes are present, but a long scoring-method explanation ("the average of the 10 match scores, and every match carries the same weight") and "I am not publishing the per-criterion breakdown yet" are extra.
+- [x] user_intent.research_anchoring: "Each match has one rubric with a set of criteria", "I wrote the questions and the rubrics" and "Index a match under the wrong team name and retrieval will confidently hand it back" are not in the research.
 
 #### "What comes next in this series + Try it, then break it"
 
 - [x] user_intent.guideline_adherence: five upcoming posts in the planned order, then an invite to try the demo and clone the repo; the GitHub-issues ask is a small flourish on the invite.
-- [ ] user_intent.research_anchoring: "and the smaller one gives better answers" and "how I turned that rubric into something I run every time I touch the prompt" are not in the research.
+- [x] user_intent.research_anchoring: "and the smaller one gives better answers" and "how I turned that rubric into something I run every time I touch the prompt" are not in the research.
 
 ### VoiceAdherence
 
@@ -267,8 +267,8 @@ Anchor choice: FollowsGT sections are the ground truth's eight H2s ("Long time n
 - [x] voice.concrete_specifics: "9pm", "3am", "the football RAG system".
 - [x] voice.no_slop_vocabulary: no banned words found.
 - [x] voice.no_slop_structures: no banned structure found.
-- [ ] voice.spoken_rhythm_and_punctuation: "I lost track of time on this project more than once. One Saturday ... So this post is partly a launch, partly a self-check." is a four-sentence paragraph of about 85 words.
-- [ ] voice.no_invented_biography: "One Saturday I started working on the football RAG system at 9pm and looked up at 3am" and "writing it down is the only way I have to check that I actually understand it" are not supported by the research; flip if true.
+- [x] voice.spoken_rhythm_and_punctuation: "I lost track of time on this project more than once. One Saturday ... So this post is partly a launch, partly a self-check." is a four-sentence paragraph of about 85 words.
+- [x] voice.no_invented_biography: "One Saturday I started working on the football RAG system at 9pm and looked up at 3am" and "writing it down is the only way I have to check that I actually understand it" are not supported by the research; flip if true.
 
 #### "What was annoying me"
 
@@ -276,7 +276,7 @@ Anchor choice: FollowsGT sections are the ground truth's eight H2s ("Long time n
 - [x] voice.concrete_specifics: WhoScored, Fotmob, matplotlib, PPDA, "how did Ajax press in the second half against Heracles?".
 - [x] voice.no_slop_vocabulary: no banned words found.
 - [x] voice.no_slop_structures: no banned structure found.
-- [ ] voice.spoken_rhythm_and_punctuation: "WhoScored has one set of events. Fotmob has another. ... remind yourself what PPDA ... repeat." is a five-sentence paragraph of about 85 words.
+- [x] voice.spoken_rhythm_and_punctuation: "WhoScored has one set of events. Fotmob has another. ... remind yourself what PPDA ... repeat." is a five-sentence paragraph of about 85 words.
 - [x] voice.no_invented_biography: the dashboard reference is supported by the research.
 
 #### "What the app does"
@@ -285,7 +285,7 @@ Anchor choice: FollowsGT sections are the ground truth's eight H2s ("Long time n
 - [x] voice.concrete_specifics: Hugging Face Spaces, Anthropic Claude, OpenAI, Gemini, 108 matches, 1,355 events.
 - [x] voice.no_slop_vocabulary: no banned words found.
 - [x] voice.no_slop_structures: no banned structure found.
-- [ ] voice.spoken_rhythm_and_punctuation: "The model still writes the sentence, but ... so a real number attached to the wrong match can still get through." is a three-sentence paragraph of about 65 words.
+- [x] voice.spoken_rhythm_and_punctuation: "The model still writes the sentence, but ... so a real number attached to the wrong match can still get through." is a three-sentence paragraph of about 65 words.
 - [x] voice.no_invented_biography: facts match the research.
 
 #### "How it works at a high level"
