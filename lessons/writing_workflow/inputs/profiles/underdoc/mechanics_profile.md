@@ -44,9 +44,9 @@ Related shapes to avoid, all the same two-beat family: mirrored halves ("The eve
 - Bad: "Everyone tells you to get a mentor. Nobody tells you where mentors actually are."
 - Good: "I got told to find a mentor for years before anyone explained where you actually find one."
 
-Note this Bad example passed `G-05` cleanly — the regex tier only lists the literal "what nobody tells you". **The two-beat family is not machine-checkable and never will be.** Sweep for it by hand on every draft: read each pair of adjacent short sentences and ask whether the second one exists to reverse, mirror, or label the first. If it does, merge them into one flat statement or delete the second.
+Note this Bad example passed `G-05` cleanly — the regex list only held the literal "what nobody tells you". Part of the family **is** machine-checkable now, and `G-05` does it: the `not X. It is Y` reversal and `what separates` fail (measured at zero hits across the 26-post corpus), and the `, not Y` tail warns (you do use it: 0.12 per post). The rest — mirrored halves, concession flips, the Everyone/Nobody hook — still needs a hand sweep on every draft: read each pair of adjacent short sentences and ask whether the second one exists to reverse, mirror, or label the first. If it does, merge them into one flat statement or delete the second.
 
-Three more AI tells from the same family, also not machine-checkable, swept alongside the two-beat family: **weasel attribution** ("experts agree", "studies show", "which suggests that" — cite a real name or number, or state it flat), **synonym cycling** (renaming the same object for variety: "The agent handles your email. The assistant drafts replies." — call it one name), and **"This is where X comes in"** (a dead transition — show X instead of announcing it).
+Two more AI tells from the same family, also not machine-checkable, swept alongside the two-beat family: **weasel attribution** ("experts agree", "studies show", "which suggests that" — cite a real name or number, or state it flat) and **synonym cycling** (renaming the same object for variety: "The agent handles your email. The assistant drafts replies." — call it one name). A third tell, **"This is where X comes in"**, is machine-checkable already: `G-05` fails it.
 
 ## Punctuation: no em-dashes, no semicolons `[advisory, measured]`
 
