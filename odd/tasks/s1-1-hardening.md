@@ -87,6 +87,11 @@ Each task closes with one work-unit commit (conventional commits, no AI attribut
 
 W0 to W4 are checked with evidence, the S1.1 run is done and `odd/reports/s1-1-verdict.md` states a verdict backed by named Opik experiments, and T10 is published by hand.
 
+## Open decisions
+
+- Warn-level gate hits: they reach the reviewer and keep the loop editing (as designed) or they are only logged? Ricardo has not chosen yet.
+- Moving the harness into the monorepo as `voice/`: at S0 (recommended, already planned) or earlier? Ricardo has not chosen yet.
+
 ## Next step
 
 W0 and W1 done (2026-10-17). Next: W2, the experience notes in the guideline template and the harness first-person rule.
