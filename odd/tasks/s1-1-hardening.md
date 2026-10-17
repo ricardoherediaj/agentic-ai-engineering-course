@@ -1,7 +1,6 @@
-# S1.1: Pre-S0 hardening (proposed)
+# S1.1: Pre-S0 hardening
 
-Status: **proposed, pending approval by Ricardo.** On approval this file is the working task list.
-Design: `capstone/s1-1-hardening-design` (#45, Engram). Evidence: `capstone/s1-1-pre-s0-findings` (#44).
+Status: **approved 2026-10-17; executing.** Design: `capstone/s1-1-hardening-design` (#45, Engram). Evidence: `capstone/s1-1-pre-s0-findings` (#44).
 Plan: `~/Documents/TheUnderdoc/capstone-plan.md` (rev 2, sections 4, 5, 7, 8). Engram: `course/capstone-plan` (#35).
 Branch: `feat/s1-unified-voice` (course repo) and `~/Documents/TheUnderdoc/harness`.
 Predecessor: `odd/tasks/s1-unified-voice.md` (S1 closed T1 to T9; T10 open there).
@@ -41,11 +40,11 @@ Each task closes with one work-unit commit (conventional commits, no AI attribut
 - [x] **H0. Branch hygiene.** Commit Ricardo's T6 labels and inputs, and remove the hybrid-profiles row from the verdict report.
   Evidence (2026-10-17): `7dee0cf` (`odd/labels/t6/` plus `odd/labels/t6-validation-sheet.md`), `bbbb5b6` (`odd/reports/s1-a2-verdict.md`). The unrelated modification in `lessons/research_agent_part_2/mcp_server/src/routers/tools.py` stays out of every commit.
 
-- [ ] **W0. Measurement fixes.** Three parts.
+- [x] **W0. Measurement fixes.** Three parts.
   (a) Cache keys. In `scripts/underdoc_run_eval.py` the generation key is `_config_fingerprint(config)` plus sample and repeat (line 190), so a profile, example, workflow or node-code change does not change it; the judge key (line 203) is judge model plus metric plus metric version plus article sha, so a voice-rules change does not change it. Extend the generation fingerprint with hashes of the profile files, the examples, the workflow and node code, and the sample's `article_guideline.md` plus `research.md`; extend the judge key with a hash of the voice-rules content. Test: changing a profile changes the generation key; changing the voice rules changes the judge key.
   (b) Biography judge. `src/brown/evals/metrics/voice_adherence/prompts.py:23` loads only tonality, mechanics and terminology, so `no_invented_biography` cannot tell a true author fact from an invention. Add `character_profiles/ricardo_heredia.md` as evidence.
   (c) FollowsGT admission rule. Report FollowsGT but exclude it from the A2 decision rule: a metric that cannot move cannot decide (flow and structure noise 0.000 in both arms; content noise 0.236). Structure is owned by the HITL 1 outline, `guideline_adherence` and online section survival. The course metric stays untouched; the change goes in as an amendment to plan section 7, with a note that it is not because of the result.
-  Evidence: new tests seen failing first, then passing; one re-judge of a cached article showing the biography criterion sees the character profile; the plan amendment text.
+  Evidence (2026-10-17): `s1.generator_code_version` now hashes `models/get_model.py` plus every `.py` under `workflows/` and `nodes/`; `s1.corpus_version(profiles_uri, examples_uri)` and `s1.input_version(guideline, research)` join the generation key, and `s1.voice_rules_version(profiles_dir)` joins the judge key for `voice_adherence`. `prompts.VOICE_PROFILE_FILES` now includes `character_profiles/ricardo_heredia.md`. Tests: 5 in `tests/brown/evals/test_s1.py` plus the character-profile assertion in `tests/brown/evals/metrics/voice_adherence/test_voice_adherence_metric.py`; all 7 were seen failing with the old code (stashed source, 7 failed / 32 passed) and pass after (39 passed). Full suite: 278 passed, 27 failed, the same 27 known baseline failures in `tests/brown/nodes/`. Plan section 7 amendment written: "Amendment: metric admission rule (2026-10-17, S1.1)".
 
 - [ ] **W1. Slop gate.** Two parts.
   (a) Harness. New patterns in two tiers in `checks/blacklist-patterns.txt` plus `checks/check.py`: FAIL (0 hits over the 26-post corpus): `not X. It is Y` and `what separates` in any form; WARN: the `, not Y` tail. A calibration test requires FAIL = 0 hits on the corpus. Amend `skill/references/voice-mechanics.md:43`: part of the two-beat family is machine-checkable (the file currently claims it is not, and never will be). Corpus rates for the record: `, not Y` tail 0.12 per post in Ricardo's corpus, 1.57 in the S1 new arm, 3.75 in baseline; `what separates` 0 in corpus, 0.29 in the new arm.
@@ -81,4 +80,4 @@ W0 to W4 are checked with evidence, the S1.1 run is done and `odd/reports/s1-1-v
 
 ## Next step
 
-On approval: W0, starting with the cache-key test (change a profile, watch the key change).
+W0 done (2026-10-17). Next: W1, the slop gate in the harness (two tiers plus the calibration test).
