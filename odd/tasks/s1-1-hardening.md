@@ -61,7 +61,7 @@ Each task closes with one work-unit commit (conventional commits, no AI attribut
 - [ ] **W4. Runtime.** Pin `CONFIG_FILE` for the Brown MCP server in `.mcp.json` (repo root), because `config.py` defaults to `configs/course-gemini-flash.yaml` (Paul's voice, Gemini) when the environment does not override it, and log the resolved config plus the loaded model ids at startup. Evals and T10 run on OpenCode Go; the production provider is an ADR in S4.
   Evidence: `.mcp.json` diff; a startup log line naming the Underdoc config and the Go models.
 
-- [ ] **R1. S1.1 run and verdict (one run, OpenCode Go).** Re-judge the S1 baseline without regenerating it, then run the new arm with W1 + W2 + W3 on the same 7 paired test posts plus noise 3 posts x 2 repeats (about half the cost of S1 run 2). Passes if `no_slop_structures` beats 0.67 by more than noise, regex hits end close to the corpus rate, `no_invented_biography` (fixed judge) improves by more than noise, and VoiceAdherence and UserIntent do not regress beyond noise. Verdict in `odd/reports/s1-1-verdict.md` plus Engram.
+- [ ] **S1.1 run and verdict (one run, OpenCode Go).** Re-judge the S1 baseline without regenerating it, then run the new arm with W1 + W2 + W3 on the same 7 paired test posts plus noise 3 posts x 2 repeats (about half the cost of S1 run 2). Passes if `no_slop_structures` beats 0.67 by more than noise, regex hits end close to the corpus rate, `no_invented_biography` (fixed judge) improves by more than noise, and VoiceAdherence and UserIntent do not regress beyond noise. Verdict in `odd/reports/s1-1-verdict.md` plus Engram.
   Evidence: Opik experiment names; the delta-versus-noise table; the verdict.
 
 - [ ] **T10. Real post (open from S1, human).** Draft the next Notion idea with the new Brown voice on OpenCode Go; Ricardo edits and publishes by hand. Record section survival and editing time as the first online baseline point.
@@ -71,13 +71,13 @@ Each task closes with one work-unit commit (conventional commits, no AI attribut
 1. H0 hygiene (done).
 2. W0 to W3.
 3. W4.
-4. R1 run and verdict.
+4. S1.1 run and verdict.
 5. T10 real post.
 6. PRs in both repos, plan rev 3, then S0.
 
 ## Done when
 
-W0 to W4 and R1 are checked with evidence, `odd/reports/s1-1-verdict.md` states a verdict backed by named Opik experiments, and T10 is published by hand.
+W0 to W4 are checked with evidence, the S1.1 run is done and `odd/reports/s1-1-verdict.md` states a verdict backed by named Opik experiments, and T10 is published by hand.
 
 ## Next step
 
