@@ -19,8 +19,14 @@ from .types import (
     VoiceAdherenceSectionScores,
 )
 
-# Profiles that carry voice rules. Structure/article profiles are about layout, not voice.
-VOICE_PROFILE_FILES = ("tonality_profile.md", "mechanics_profile.md", "terminology_profile.md")
+# Profiles the judge receives as voice rules. Structure and article profiles are about layout, not voice.
+# The character profile is the evidence `no_invented_biography` needs to tell a true author fact from an invention.
+VOICE_PROFILE_FILES = (
+    "tonality_profile.md",
+    "mechanics_profile.md",
+    "terminology_profile.md",
+    "character_profiles/ricardo_heredia.md",
+)
 
 SYSTEM_PROMPT = """You are an expert editor and evaluator of authorial voice. Your task is to judge whether a generated
 article follows the voice of its author, using ONLY the voice rules provided below. You do not judge topic coverage, 

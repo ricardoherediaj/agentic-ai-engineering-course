@@ -7,6 +7,7 @@ unit-testable offline.
 
 import hashlib
 import json
+import os
 import re
 import time
 from pathlib import Path
@@ -84,7 +85,9 @@ def with_backoff(
 
 
 METRICS_DIR = Path(__file__).parent / "metrics"
-GENERATOR_CODE_FILES = (Path(__file__).parents[1] / "models" / "get_model.py",)
+BROWN_SRC = Path(__file__).parents[1]
+# Everything that shapes a generated article: the model factory plus the workflow and node packages.
+GENERATOR_CODE_FILES = (BROWN_SRC / "models" / "get_model.py", BROWN_SRC / "workflows", BROWN_SRC / "nodes")
 
 
 def _hash_files(files: list[Path], root: Path) -> str:
@@ -106,8 +109,51 @@ def metric_version(metric: str, metrics_dir: Path = METRICS_DIR) -> str:
 
 
 def generator_code_version(files: tuple[Path, ...] = GENERATOR_CODE_FILES) -> str:
-    """Hash of the generator-side code that shapes model calls, so articles made before a fix are regenerated."""
-    return _hash_files(list(files), files[0].parent)
+    """Hash of the generator-side code that shapes model calls, so articles made before a fix are regenerated.
+
+    A path may be a directory, which expands to every `.py` file under it (workflows, nodes).
+    """
+    expanded = [f.resolve() for f in _expand_code_paths(files)]
+    root = Path(os.path.commonpath([str(f) for f in expanded]))
+    return _hash_files(expanded, root)
+
+
+def _expand_code_paths(paths: tuple[Path, ...]) -> list[Path]:
+    expanded: list[Path] = []
+    for path in paths:
+        expanded.extend(sorted(p for p in path.rglob("*.py") if p.is_file()) if path.is_dir() else [path])
+    return expanded
+
+
+def corpus_version(profiles_dir: Path, examples_dir: Path) -> str:
+    """Hash of the profile and example files the generator reads, so an input edit regenerates articles."""
+    digest = hashlib.sha256()
+    for label, directory in (("profiles", Path(profiles_dir)), ("examples", Path(examples_dir))):
+        for file in sorted(p for p in directory.rglob("*") if p.is_file()):
+            digest.update(f"{label}/{file.relative_to(directory).as_posix()}".encode())
+            digest.update(file.read_bytes())
+    return digest.hexdigest()[:12]
+
+
+def voice_rules_version(profiles_dir: Path) -> str:
+    """Hash of the voice-rules files the VoiceAdherence judge loads, so a profile edit re-judges.
+
+    The file list comes from the metric itself, so the key covers exactly the text that reaches the judge.
+    """
+    from brown.evals.metrics.voice_adherence.prompts import VOICE_PROFILE_FILES
+
+    root = Path(profiles_dir)
+    files = [root / name for name in VOICE_PROFILE_FILES]
+    return _hash_files([f for f in files if f.is_file()], root)
+
+
+def input_version(guideline: str, research: str) -> str:
+    """Hash of one sample's input files, so editing a guideline or a dossier regenerates the article."""
+    digest = hashlib.sha256()
+    digest.update(guideline.encode())
+    digest.update(b"\x00")
+    digest.update(research.encode())
+    return digest.hexdigest()[:12]
 
 
 def hash_key(key: dict[str, Any]) -> str:

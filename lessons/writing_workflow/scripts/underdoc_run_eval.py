@@ -15,6 +15,7 @@ import os
 import sys
 import uuid
 from pathlib import Path
+from typing import Any
 
 import click
 from loguru import logger
@@ -25,11 +26,14 @@ DEFAULT_DATASET_DIR = Path("inputs/evals/underdoc_dataset")
 EXIT_PROVIDER_UNAVAILABLE = 75
 
 
-def _config_fingerprint(config: Path) -> dict:
+def _config_fingerprint(config: Path, app_config: Any) -> dict:
+    """Cache-key fingerprint: everything outside the sample that can change a generated article."""
+    context = app_config.context
     return {
         "config": config.name,
         "config_sha": hashlib.sha256(config.read_bytes()).hexdigest()[:12],
         "generator_code": s1.generator_code_version(),
+        "corpus": s1.corpus_version(context.profiles_uri, context.examples_uri),
     }
 
 
@@ -173,7 +177,9 @@ def main(
         else ModelConfig(temperature=0.0, max_retries=3)
     )
     metric_objs = dict(zip(metrics, build_evaluation_metrics(list(metrics), model, model_config), strict=True))
-    fingerprint = _config_fingerprint(config_file)
+    fingerprint = _config_fingerprint(config_file, app_config)
+    voice_profiles_dir = Path(metric_objs["voice_adherence"].profiles_dir) if "voice_adherence" in metric_objs else None
+    voice_rules = s1.voice_rules_version(voice_profiles_dir) if voice_profiles_dir else None
 
     for repeat in range(1, repeats + 1):
         experiment = f"{experiment_name}-r{repeat}"
@@ -187,7 +193,15 @@ def main(
                 slug = Path(meta["directory"]).name
                 sample_dir = run_dir / slug
                 logger.info(f"[{experiment}] {slug}")
-                gen_cache = s1.ItemCache(sample_dir, {**fingerprint, "sample": slug, "repeat": repeat})
+                gen_cache = s1.ItemCache(
+                    sample_dir,
+                    {
+                        **fingerprint,
+                        "sample": slug,
+                        "repeat": repeat,
+                        "input": s1.input_version(sample.article_guideline, sample.research),
+                    },
+                )
                 article = gen_cache.get_or_compute(
                     "article.md", lambda s=sample, d=sample_dir: _generate(d, s, d / "work"), retries=retries
                 )
@@ -198,10 +212,15 @@ def main(
                     if reason:
                         skipped.setdefault(meta["name"], {})[name] = reason
                         continue
-                    judge_cache = s1.ItemCache(
-                        sample_dir,
-                        {"judge": judge_model, "metric": name, "metric_version": s1.metric_version(name), "article": article_sha},
-                    )
+                    judge_key = {
+                        "judge": judge_model,
+                        "metric": name,
+                        "metric_version": s1.metric_version(name),
+                        "article": article_sha,
+                    }
+                    if name == "voice_adherence" and voice_rules:
+                        judge_key["voice_rules"] = voice_rules
+                    judge_cache = s1.ItemCache(sample_dir, judge_key)
                     raw = judge_cache.get_or_compute(
                         f"judge_{name}.json", lambda n=name, s=sample, a=article: _judge(metric_objs[n], s, a), retries=retries
                     )

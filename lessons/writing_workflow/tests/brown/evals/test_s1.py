@@ -227,6 +227,77 @@ def test_runner_keys_include_versions() -> None:
     src = (ROOT / "scripts" / "underdoc_run_eval.py").read_text()
     assert "s1.generator_code_version()" in src
     assert "s1.metric_version(name)" in src
+    assert "s1.corpus_version(" in src
+    assert "s1.input_version(" in src
+    assert "s1.voice_rules_version(" in src
+
+
+def test_generator_code_version_tracks_a_package_dir(tmp_path: Path) -> None:
+    package = tmp_path / "nodes"
+    package.mkdir()
+    (package / "a.py").write_text("a")
+    base = s1.generator_code_version((package,))
+    (package / "a.py").write_text("b")
+    assert s1.generator_code_version((package,)) != base
+
+
+def _write_voice_profiles(root: Path) -> None:
+    from brown.evals.metrics.voice_adherence import prompts as voice_prompts
+
+    for name in voice_prompts.VOICE_PROFILE_FILES:
+        path = root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(f"RULES {name}")
+
+
+def test_corpus_version_tracks_profile_and_example_edits(tmp_path: Path) -> None:
+    profiles, examples = tmp_path / "profiles", tmp_path / "examples"
+    examples.mkdir()
+    (examples / "post.md").write_text("e")
+    _write_voice_profiles(profiles)
+
+    base = s1.corpus_version(profiles, examples)
+    assert s1.corpus_version(profiles, examples) == base
+    (profiles / "mechanics_profile.md").write_text("changed")
+    after_profile = s1.corpus_version(profiles, examples)
+    assert after_profile != base
+    (examples / "post.md").write_text("changed")
+    assert s1.corpus_version(profiles, examples) != after_profile
+
+
+def test_voice_rules_version_tracks_voice_profile_content(tmp_path: Path) -> None:
+    _write_voice_profiles(tmp_path)
+    base = s1.voice_rules_version(tmp_path)
+    assert s1.voice_rules_version(tmp_path) == base
+    (tmp_path / "tonality_profile.md").write_text("changed")
+    assert s1.voice_rules_version(tmp_path) != base
+
+
+def test_judge_cache_invalidates_on_voice_rules(tmp_path: Path) -> None:
+    profiles = tmp_path / "profiles"
+    _write_voice_profiles(profiles)
+    calls: list[int] = []
+
+    def judge(rules: str) -> str:
+        cache = s1.ItemCache(
+            tmp_path / "out",
+            {"judge": "j", "metric": "voice_adherence", "metric_version": "v", "article": "a", "voice_rules": rules},
+        )
+        return cache.get_or_compute("judge_voice_adherence.json", lambda: calls.append(1) or "r", retries=0)
+
+    judge(s1.voice_rules_version(profiles))
+    judge(s1.voice_rules_version(profiles))
+    assert len(calls) == 1  # unchanged rules hit the cache
+    (profiles / "mechanics_profile.md").write_text("changed")
+    judge(s1.voice_rules_version(profiles))
+    assert len(calls) == 2  # a profile edit re-judges
+
+
+def test_input_version_tracks_guideline_and_research() -> None:
+    base = s1.input_version("G", "R")
+    assert s1.input_version("G", "R") == base
+    assert s1.input_version("G2", "R") != base
+    assert s1.input_version("G", "R2") != base
 
 
 def test_current_item_ids_keeps_only_this_runs_samples() -> None:

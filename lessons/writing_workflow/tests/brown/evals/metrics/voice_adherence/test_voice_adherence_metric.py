@@ -139,14 +139,18 @@ async def test_ascore_forwards_guideline_and_research(mixed_scores: VoiceAdheren
 
 
 def test_voice_rules_path_is_configurable(tmp_path, mixed_scores: VoiceAdherenceArticleScores) -> None:
+    """The judge must receive every voice-rules file, including the character profile `no_invented_biography` needs."""
     for name in prompts.VOICE_PROFILE_FILES:
-        (tmp_path / name).write_text(f"CUSTOM RULES {name}")
+        path = tmp_path / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(f"CUSTOM RULES {name}")
     metric = VoiceAdherenceMetricLLMJudge(
         model=SupportedModels.FAKE_MODEL,
         model_config=ModelConfig(mocked_response=mixed_scores),
         profiles_dir=tmp_path,
     )
     assert "CUSTOM RULES tonality_profile.md" in metric.voice_rules
+    assert "CUSTOM RULES character_profiles/ricardo_heredia.md" in metric.voice_rules
 
 
 def test_few_shot_examples_are_valid_and_cover_on_and_off_voice() -> None:
