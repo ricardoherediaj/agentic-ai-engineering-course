@@ -8,6 +8,7 @@ from brown.entities.articles import Article, SelectedText
 from brown.entities.exceptions import InvalidOutputTypeException
 from brown.entities.guidelines import ArticleGuideline
 from brown.entities.profiles import ArticleProfiles
+from brown.entities.research import Research
 from brown.entities.reviews import ArticleReviews, HumanFeedback, Review, SelectedTextReviews
 from brown.models import FakeModel
 
@@ -39,6 +40,7 @@ The requirements are a set of rules, guidelines or profiles that the article sho
 - **mechanics profile:** Mechanics rules guiding the writing process. Generic for all content.
 - **terminology profile:** Terminology rules guiding word choice and phrasing. Generic for all content.
 - **tonality profile:** Tonality rules guiding the writing style. Generic for all content.
+- **research:** the factual data the article may use. Specific to this particular article.
 
 ## Human Feedback
 
@@ -90,6 +92,17 @@ over any other instructions.
 
 Here is the article guideline:
 {article_guideline}
+
+## Research
+
+Here is the research, the factual data the article may use besides the <article_guideline>:
+{research}
+
+Every concrete fact in the article (an event, a result, an error, a number, a timing, how something was built or a worked
+example) must be supported by the <research> or the <article_guideline>, whether it is written in the first person or
+impersonally. Flag each unsupported fact with the profile "research" and ask to replace it with what the sources support,
+or with a marker `[EXPERIENCE: what would go here]` on its own line when the section needs a fact nobody provided.
+Never ask to remove, fill in or rewrite an existing `[EXPERIENCE: ...]` marker: it is a deliberate gap for the author.
 
 ## Character Profile
 
@@ -159,7 +172,7 @@ Other more generic rules:
 
 For each issue you identify, create a review with:
 - **profile**: The requirement where the issue was found (e.g., "human_feedback", "article_guideline", "character_profile", 
-"article_profile", "structure_profile", "mechanics_profile", "terminology_profile", "tonality_profile")
+"article_profile", "structure_profile", "mechanics_profile", "terminology_profile", "tonality_profile", "research")
 - **location**: The section title where the issue was found and the paragraph number. For example, "Introduction - First paragraph" 
 or "Implementing GraphRAG - Third paragraph"
 - **comment**: A detailed explanation of why it's wrong, what's wrong and how it deviates from the requirement.
@@ -213,9 +226,11 @@ previous chain of thoughts:
         article_profiles: ArticleProfiles,
         human_feedback: HumanFeedback | None = None,
         max_reviews: int = 5,
+        research: Research | None = None,
     ) -> None:
         self.to_review = to_review
         self.article_guideline = article_guideline
+        self.research = research
         self.article_profiles = article_profiles
         self.human_feedback = human_feedback
         self.max_reviews = max_reviews
@@ -248,6 +263,7 @@ previous chain of thoughts:
             human_feedback=self.human_feedback.to_context() if self.human_feedback else "",
             article=self.article.to_context(),
             article_guideline=self.article_guideline.to_context(),
+            research=self.research.to_context() if self.research else "No research was provided.",
             character_profile=self.article_profiles.character.to_context(),
             article_profile=self.article_profiles.article.to_context(),
             structure_profile=self.article_profiles.structure.to_context(),
