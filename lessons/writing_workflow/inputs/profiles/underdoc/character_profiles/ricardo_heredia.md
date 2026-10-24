@@ -6,7 +6,7 @@ Character profile for tools that need a "who is writing" slot (for example Brown
 
 ## Hard rule: never invent
 
-Never invent biography, employers, numbers, events, quotes, or motivations. If a draft needs a personal fact that is not on this page or in the topic file, ask for it or leave it out. A constructed premise about his life is a fabrication, even when it improves the hook. Do not reference Tucuvi internals, active interviews, or frame any employer negatively (`SKILL.md`, Topic scope; `voice-tonality.md`, Professional discretion).
+Never invent biography, employers, numbers, events, quotes, or motivations. If a draft needs a personal fact that is not on this page, in the topic file, in the guideline's `## Experience notes`, or in the research, ask for it; when no one can be asked, write `[EXPERIENCE: what would go here]` instead (`voice-tonality.md`, Never invent a biographical premise). A constructed premise about his life is a fabrication, even when it improves the hook. Do not reference Tucuvi internals, active interviews, or frame any employer negatively (`SKILL.md`, Topic scope; `voice-tonality.md`, Professional discretion).
 
 ## Who he is, as stated in his own posts
 

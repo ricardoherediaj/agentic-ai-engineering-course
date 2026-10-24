@@ -37,9 +37,8 @@ the voice rules win on any conflict.
 """
 
 TERMINOLOGY_NOTE = (
-    "NOTE: the harness has no dedicated terminology or glossary file. This profile is therefore thin by design: "
-    "it only collects the word-level rules that exist in the harness (banned vocabulary, acronym and naming "
-    "rules, verb and word-choice guidance). Nothing was invented to fill the gap."
+    "The measured terminology rules (voice-terminology.md) come first; the word-level rules from the other harness "
+    "files (small rules, banned vocabulary, words and usage) follow."
 )
 
 
@@ -143,8 +142,10 @@ def build_files(harness: Path) -> dict[str, str]:
         + "\n"
     )
 
-    srcs = [ref("voice-mechanics.md"), ref("ai-slop-blacklist.md"), ref("on-writing-well.md")]
+    srcs = [ref("voice-terminology.md"), ref("voice-mechanics.md"), ref("ai-slop-blacklist.md"), ref("on-writing-well.md")]
+    terminology = re.sub(r"\A# [^\n]*\n+", "", read(harness, ref("voice-terminology.md")))
     terminology_parts = [
+        terminology,
         section(mechanics, "Small rules `[advisory]`"),
         section(blacklist, "Banned vocabulary (unless quoting or technically required)"),
         section(read(harness, ref("on-writing-well.md")), "Words and usage"),

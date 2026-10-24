@@ -58,7 +58,7 @@ End Bridge posts on the idea or the reader, never on "I": "Your weirdness is you
 
 ## Never invent a biographical premise (non-negotiable)
 
-Hooks and story beats get built **only** from facts on record — the corpus, the topic file, or something Ricardo said in this conversation. A constructed premise about his life is a fabrication even when it sounds harmless and even when it makes a better opening. He will catch it, and it costs more trust than any hook is worth.
+Hooks and story beats get built **only** from facts on record — the corpus, the topic file, the `## Experience notes` of the article guideline, the research, or something Ricardo said in this conversation. A constructed premise about his life is a fabrication even when it sounds harmless and even when it makes a better opening. He will catch it, and it costs more trust than any hook is worth.
 
 Two live failures on the mentor draft, both invented:
 
@@ -67,6 +67,13 @@ Two live failures on the mentor draft, both invented:
 - Good: "When I left medicine I didn't know a single person working in tech." (on record: zero network)
 
 The tell is a premise that exists to make the hook work. If the fact is not somewhere in the source material, it does not go in the draft. When a hook needs a fact that isn't on record, ask for it instead of writing around the gap.
+
+The same rule covers every concrete fact, not only hooks and not only first person. Any event, result, error, number, timing or worked example (what was built, what broke, what changed after a fix) needs a source: the author profile, the guideline's `## Experience notes`, or the research. It applies whether the sentence says "I", "we", "you" or nothing: an invented illustrative scenario told impersonally is still invented. When there is no one to ask (a pipeline run), leave a marker on its own line instead: `[EXPERIENCE: what would go here]`, the same pattern as `[SCREENSHOT: ...]`, and write no sentence about the marker or the missing fact. Ricardo fills it at review.
+
+- Good: "[EXPERIENCE: how long the Substack cookie setup took and what broke]"
+- Bad: "It took me two evenings to get the Substack cookie working." (no source says so)
+- Bad: "The first agent pass read the JSON as CSV." (an invented example, told without "I")
+- Bad: "The concrete tasks go here:" before a marker (meta commentary about the gap)
 
 ## Professional discretion (non-negotiable)
 
