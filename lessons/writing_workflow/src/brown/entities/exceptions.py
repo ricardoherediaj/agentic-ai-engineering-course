@@ -24,6 +24,15 @@ class InvalidOutputTypeException(BrownException):
         super().__init__(f"Invalid output type. Expected `{self.expected_type}`, got `{self.output_type}`")
 
 
+class EmptyModelOutputException(BrownException):
+    """Exception raised when the model returns no text, e.g. when the provider's content filter blocks the answer."""
+
+    def __init__(self, finish_reason: str | None) -> None:
+        self.finish_reason = finish_reason
+
+        super().__init__(f"The model returned no text (finish_reason: `{self.finish_reason}`)")
+
+
 class InvalidConfigurationException(BrownException):
     """Exception raised when the configuration is invalid."""
 

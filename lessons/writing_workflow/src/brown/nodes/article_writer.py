@@ -4,7 +4,7 @@ from langchain_core.messages import AIMessage
 from langchain_core.runnables import Runnable
 
 from brown.entities.articles import Article, ArticleExamples, SelectedText
-from brown.entities.exceptions import InvalidOutputTypeException
+from brown.entities.exceptions import EmptyModelOutputException, InvalidOutputTypeException
 from brown.entities.guidelines import ArticleGuideline
 from brown.entities.media_items import MediaItems
 from brown.entities.profiles import ArticleProfiles
@@ -339,6 +339,9 @@ following all the necessary instructions from the profiles and guidelines above.
         written_output = await self.model.ainvoke(inputs)
         if not isinstance(written_output, AIMessage):
             raise InvalidOutputTypeException(AIMessage, type(written_output))
+        if not written_output.text.strip():
+            # A filtered answer (finish_reason "content_filter") arrives as empty text; never render it as an article.
+            raise EmptyModelOutputException(written_output.response_metadata.get("finish_reason"))
         written_output = cast(str, written_output.text)
 
         if isinstance(self.reviews, SelectedTextReviews):
