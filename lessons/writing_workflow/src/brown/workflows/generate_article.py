@@ -3,10 +3,12 @@ from pathlib import Path
 from typing import TypedDict, cast
 
 from langchain_core.runnables import RunnableConfig
+from langchain_core.tools import BaseTool
 from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.config import get_stream_writer
 from langgraph.func import entrypoint, task
 from langgraph.types import RetryPolicy
+from pydantic import ValidationError
 
 from brown.base import Loader
 from brown.builders import build_article_renderer, build_loaders, build_model, build_slop_gate
@@ -129,6 +131,17 @@ async def _generate_article_workflow(inputs: GenerateArticleInput, config: Runna
     return f"Final article rendered to`{article_path}`."
 
 
+async def invoke_media_job(tool: BaseTool, args: dict) -> MediaItem | None:
+    """Run one media tool call; a call with invalid arguments is skipped instead of failing the whole article.
+
+    The orchestrator sometimes emits a placeholder call (e.g. "No diagram needed") without the required fields.
+    """
+    try:
+        return await tool.ainvoke(args)
+    except ValidationError:
+        return None
+
+
 @task(retry_policy=retry_policy)
 async def generate_media_items(article_guideline: ArticleGuideline, research: Research) -> MediaItems:
     writer = get_stream_writer()
@@ -153,11 +166,14 @@ async def generate_media_items(article_guideline: ArticleGuideline, research: Re
         if tool is None:
             writer(f"⚠️ Warning: Unknown tool '{tool_name}', skipping...")
             continue
-        coroutine = tool.ainvoke(media_item_to_generate_job["args"])
+        coroutine = invoke_media_job(tool, media_item_to_generate_job["args"])
         coroutines.append(coroutine)
 
     writer(f"Executing {len(coroutines)} media item generation jobs in parallel.")
-    media_items: list[MediaItem] = await asyncio.gather(*coroutines)
+    results = await asyncio.gather(*coroutines)
+    media_items: list[MediaItem] = [item for item in results if item is not None]
+    if len(media_items) < len(results):
+        writer(f"⚠️ Warning: skipped {len(results) - len(media_items)} media item job(s) with invalid arguments.")
     writer(f"Generated {len(media_items)} media items.")
 
     return MediaItems.build(media_items)
