@@ -4,6 +4,7 @@ from typing import Annotated, Any, Literal
 
 import yaml
 from annotated_types import Ge
+from loguru import logger
 from pydantic import BaseModel, DirectoryPath, Field, field_validator
 
 from brown.config import get_settings
@@ -129,3 +130,10 @@ class AppConfig(BaseModel):
 @lru_cache(maxsize=1)
 def get_app_config() -> AppConfig:
     return AppConfig.from_yaml(get_settings().CONFIG_FILE)
+
+
+def log_startup_config(config_file: Path, app_config: AppConfig) -> None:
+    """Log the resolved CONFIG_FILE path and the model id each node loads."""
+
+    models = ", ".join(f"{name}={node.model_id.value}" for name, node in app_config.nodes.items())
+    logger.info(f"CONFIG_FILE={Path(config_file).resolve()} | models: {models}")

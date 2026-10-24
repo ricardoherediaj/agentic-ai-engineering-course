@@ -21,7 +21,9 @@ from langgraph.pregel.main import RunnableConfig
 from loguru import logger
 
 from brown.builders import build_loaders, build_short_term_memory
+from brown.config import get_settings
 from brown.config_app import get_app_config as load_app_config
+from brown.config_app import log_startup_config
 from brown.observability import tracing
 from brown.workflows import (
     build_edit_article_workflow,
@@ -31,6 +33,7 @@ from brown.workflows import (
 from brown.workflows.types import WorkflowProgress
 
 app_config = load_app_config()
+log_startup_config(get_settings().CONFIG_FILE, app_config)
 
 logger.info("Initializing Brown MCP Server...")
 mcp = FastMCP("Brown MCP Server")
