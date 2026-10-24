@@ -27,17 +27,18 @@ nodes:
         model_id: "opencode_go:deepseek-v4.1-flash"
         config: {}
   write_article:
-    model_id: "opencode_go:deepseek-v4.1-flash"
+    # v4.1-flash returns `content_filter` with no text on the full writer prompt (2026-10-22).
+    model_id: "opencode_go:deepseek-v4-pro"
     model_config: {}
   review_article:
     model_id: "opencode_go:gpt-6-luna"
     model_config: {}
   edit_article:
-    model_id: "opencode_go:deepseek-v4.1-flash"
+    model_id: "opencode_go:deepseek-v4-pro"
     model_config: {}
   review_selected_text:
     model_id: "opencode_go:gpt-6-luna"
     model_config: {}
   edit_selected_text:
-    model_id: "opencode_go:deepseek-v4.1-flash"
+    model_id: "opencode_go:deepseek-v4-pro"
     model_config: {}

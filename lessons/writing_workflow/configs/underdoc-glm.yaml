@@ -1,0 +1,44 @@
+context:
+  article_guideline_loader: "markdown"
+  article_guideline_uri: "article_guideline.md"
+  research_loader: "markdown"
+  research_uri: "research.md"
+  article_loader: "markdown"
+  article_renderer: "markdown"
+  article_uri: "article.md"
+  profiles_loader: "markdown"
+  profiles_uri: "inputs/profiles/underdoc"
+  character_profile: "ricardo_heredia.md"
+  examples_loader: "markdown"
+  examples_uri: "inputs/examples/underdoc"
+memory:
+  checkpointer: "in_memory"
+num_reviews: 3
+max_reviews_per_iteration: 5
+slop_gate:
+  # Harness G-05 hits are fed into the review loop as `mechanics` reviews. Path: UNDERDOC_HARNESS_PATH.
+  enabled: true
+nodes:
+  generate_media_items:
+    model_id: "opencode_go:deepseek-v4.1-flash"
+    model_config: {}
+    tools:
+      mermaid_diagram_generator:
+        model_id: "opencode_go:deepseek-v4.1-flash"
+        config: {}
+  write_article:
+    # v4.1-flash returns `content_filter` with no text on the full writer prompt (2026-10-22).
+    model_id: "opencode_go:glm-5.3"
+    model_config: {}
+  review_article:
+    model_id: "opencode_go:gpt-6-luna"
+    model_config: {}
+  edit_article:
+    model_id: "opencode_go:glm-5.3"
+    model_config: {}
+  review_selected_text:
+    model_id: "opencode_go:gpt-6-luna"
+    model_config: {}
+  edit_selected_text:
+    model_id: "opencode_go:glm-5.3"
+    model_config: {}

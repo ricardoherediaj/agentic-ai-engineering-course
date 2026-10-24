@@ -19,6 +19,10 @@ class SupportedModels(StrEnum):
     OPENCODE_GO_GPT_6_LUNA = "opencode_go:gpt-6-luna"
     OPENCODE_GO_DEEPSEEK_V4_FLASH = "opencode_go:deepseek-v4-flash"
     OPENCODE_GO_DEEPSEEK_V41_FLASH = "opencode_go:deepseek-v4.1-flash"
+    # Underdoc writer: v4.1-flash returns `content_filter` with no text on the full writer prompt.
+    OPENCODE_GO_DEEPSEEK_V4_PRO = "opencode_go:deepseek-v4-pro"
+    # Writer candidate: best open-weight model on the Towards AI ToneBench writing benchmark (2026-10-20).
+    OPENCODE_GO_GLM_53 = "opencode_go:glm-5.3"
     FAKE_MODEL = "fake"
 
 
@@ -99,4 +103,7 @@ DEFAULT_MODEL_CONFIGS = {
     "opencode_go:gpt-6-luna": ModelConfig(max_retries=3),
     "opencode_go:deepseek-v4-flash": ModelConfig(temperature=0.0, max_retries=3),
     "opencode_go:deepseek-v4.1-flash": ModelConfig(temperature=0.0, max_retries=3),
+    "opencode_go:deepseek-v4-pro": ModelConfig(temperature=0.0, max_retries=3),
+    # No temperature: GLM thinking models are tuned for the provider default.
+    "opencode_go:glm-5.3": ModelConfig(max_retries=3),
 }

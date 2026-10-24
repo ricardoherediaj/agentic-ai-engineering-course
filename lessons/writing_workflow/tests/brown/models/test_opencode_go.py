@@ -26,6 +26,7 @@ def make_settings(**overrides) -> Settings:
         (SupportedModels.OPENCODE_GO_GPT_6_LUNA, "gpt-6-luna", True),
         (SupportedModels.OPENCODE_GO_DEEPSEEK_V4_FLASH, "deepseek-v4-flash", False),
         (SupportedModels.OPENCODE_GO_DEEPSEEK_V41_FLASH, "deepseek-v4.1-flash", False),
+        (SupportedModels.OPENCODE_GO_GLM_53, "glm-5.3", False),
     ],
 )
 def test_opencode_model_builds_offline(model, model_id, responses) -> None:
@@ -82,14 +83,21 @@ def test_google_path_unchanged() -> None:
     assert "base_url" not in kwargs
 
 
-@pytest.mark.parametrize("name", ["course-fallback.yaml", "underdoc-fallback.yaml"])
-def test_fallback_configs_parse(name) -> None:
+@pytest.mark.parametrize(
+    ("name", "writer"),
+    [
+        ("course-fallback.yaml", "opencode_go:deepseek-v4.1-flash"),
+        # v4.1-flash returns `content_filter` on the full Underdoc writer prompt, so Underdoc writes with v4-pro.
+        ("underdoc-fallback.yaml", "opencode_go:deepseek-v4-pro"),
+    ],
+)
+def test_fallback_configs_parse(name, writer) -> None:
     app_config = AppConfig.from_yaml(CONFIGS_DIR / name)
     dumped = app_config.model_dump(mode="json")
     model_ids = {k: v["model_id"] for k, v in dumped["nodes"].items()}
     assert model_ids["review_article"] == "opencode_go:gpt-6-luna"
     assert model_ids["review_selected_text"] == "opencode_go:gpt-6-luna"
-    assert model_ids["write_article"] == "opencode_go:deepseek-v4.1-flash"
+    assert model_ids["write_article"] == writer
     assert all(v.startswith("opencode_go:") for v in model_ids.values())
 
 

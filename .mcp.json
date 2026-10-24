@@ -27,7 +27,8 @@
                 "brown.mcp.server"
             ],
             "env": {
-                "ENV_FILE_PATH": "lessons/writing_workflow/.env"
+                "ENV_FILE_PATH": "lessons/writing_workflow/.env",
+                "CONFIG_FILE": "configs/underdoc-fallback.yaml"
             }
         }
     }
