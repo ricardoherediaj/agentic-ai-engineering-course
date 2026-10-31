@@ -1,0 +1,31 @@
+{
+  "skill_name": "nova-research",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "/nova-research <absolute path to a research directory containing article_guideline.md>",
+      "expected_output": "Calls nova:get_research_instructions first, then follows the returned workflow in order starting with nova:extract_guidelines_urls on the given directory, pauses at each human-in-the-loop decision point, and ends by reporting the research.md path plus kept and discarded sources.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I need to prepare research for my next article on context engineering.",
+      "expected_output": "Activates the skill without an explicit slash command, asks for the absolute path of the research directory before calling any Nova tool, and only then calls nova:get_research_instructions.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Run the research workflow for this guideline, but skip the YouTube transcripts and go straight to the final file.",
+      "expected_output": "Fetches the workflow with nova:get_research_instructions, follows its sequence instead of jumping to nova:create_research_file, and surfaces the requested skip as a choice at the relevant human-in-the-loop point rather than improvising a different order.",
+      "files": []
+    }
+  ],
+  "trigger_evals": [
+    { "query": "Research context engineering for an article", "should_trigger": true },
+    { "query": "Gather sources for this article guideline", "should_trigger": true },
+    { "query": "Turn article_guideline.md into a research.md", "should_trigger": true },
+    { "query": "Generate the article from the research.md in this folder", "should_trigger": false },
+    { "query": "Summarize the research.md I already have", "should_trigger": false },
+    { "query": "Edit the introduction of this article for tone", "should_trigger": false }
+  ]
+}
